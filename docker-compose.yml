@@ -1,0 +1,58 @@
+name: zenkai-dojo
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-zenkai}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-zenkai}
+      POSTGRES_DB: ${POSTGRES_DB:-zenkai}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-zenkai} -d ${POSTGRES_DB:-zenkai}"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-zenkai}:${POSTGRES_PASSWORD:-zenkai}@db:5432/${POSTGRES_DB:-zenkai}?schema=public
+      DIRECT_URL: postgresql://${POSTGRES_USER:-zenkai}:${POSTGRES_PASSWORD:-zenkai}@db:5432/${POSTGRES_DB:-zenkai}?schema=public
+      JWT_SECRET: ${JWT_SECRET:-cambia-este-secreto-en-produccion}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-12h}
+      PORT: 4000
+      HOST: 0.0.0.0
+      # El navegador entra por nginx (mismo origen); en producción no se admite "*"
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:${WEB_PORT:-8080}}
+      NODE_ENV: production
+      SEED_ON_START: ${SEED_ON_START:-true}
+      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-admin@zenkai.dojo}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-admin123}
+      SEED_TABLE_PASSWORD: ${SEED_TABLE_PASSWORD:-mesa123}
+      DOCS_ENABLED: ${DOCS_ENABLED:-true}
+    ports:
+      - "${API_PORT:-4000}:4000"
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://localhost:4000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "${WEB_PORT:-8080}:80"
+
+volumes:
+  pgdata:

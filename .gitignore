@@ -1,0 +1,20 @@
+# Dependencias y compilados
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Variables de entorno (secretos). Solo se versionan los ejemplos
+.env
+.env.*
+!.env.example
+
+# Resultados de pruebas y capturas temporales (Playwright)
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+coverage/
+
+# Sistema / editor
+*.log
+.DS_Store

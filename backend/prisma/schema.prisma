@@ -1,0 +1,330 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+// DATABASE_URL: conexión que usa la app (en Neon, la del pooler: host con "-pooler").
+// DIRECT_URL: conexión directa para `prisma migrate` (en Neon, host sin "-pooler").
+// En Docker y en local ambas pueden ser la misma cadena.
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  ADMIN
+  TABLE
+}
+
+enum Gender {
+  M
+  F
+  X
+}
+
+enum TournamentStatus {
+  DRAFT
+  REGISTRATION
+  WEIGH_IN
+  IN_PROGRESS
+  FINISHED
+}
+
+enum BracketFormat {
+  SINGLE_ELIMINATION
+  SINGLE_ELIMINATION_BRONZE
+  DOUBLE_ELIMINATION
+  ROUND_ROBIN
+}
+
+enum CategoryStatus {
+  OPEN
+  BRACKET_READY
+  IN_PROGRESS
+  FINISHED
+}
+
+enum WeighInStatus {
+  PENDING
+  OK
+  OVERWEIGHT
+  UNDERWEIGHT
+  DISQUALIFIED
+}
+
+enum MatchStatus {
+  PENDING
+  IN_PROGRESS
+  FINISHED
+  BYE
+}
+
+enum BracketSide {
+  WINNERS
+  LOSERS
+  GRAND_FINAL
+  THIRD_PLACE
+  ROUND_ROBIN
+}
+
+model User {
+  id           String          @id @default(uuid())
+  email        String          @unique
+  passwordHash String
+  name         String
+  role         Role            @default(TABLE)
+  active       Boolean         @default(true)
+  createdAt    DateTime        @default(now())
+  mats         MatAssignment[]
+  audits       ResultAudit[]
+  resultsSet   Match[]         @relation("ResultBy")
+}
+
+model Sport {
+  id                 String          @id @default(uuid())
+  name               String          @unique
+  slug               String          @unique
+  defaultDurationSec Int             @default(300)
+  description        String?
+  victoryMethods     VictoryMethod[]
+  beltLevels         BeltLevel[]
+  tournaments        Tournament[]
+  createdAt          DateTime        @default(now())
+}
+
+model VictoryMethod {
+  id      String  @id @default(uuid())
+  sportId String
+  sport   Sport   @relation(fields: [sportId], references: [id], onDelete: Cascade)
+  code    String
+  name    String
+  order   Int     @default(0)
+  points  Int     @default(1) // puntos para desempate en round robin
+  matches Match[]
+
+  @@unique([sportId, code])
+}
+
+model BeltLevel {
+  id            String         @id @default(uuid())
+  sportId       String
+  sport         Sport          @relation(fields: [sportId], references: [id], onDelete: Cascade)
+  name          String
+  color         String // hex principal
+  secondary     String? // franja/segundo color (ej. blanco en cinturones infantiles)
+  order         Int            @default(0)
+  athletes      Athlete[]
+  categories    Category[]
+  categoryBelts CategoryBelt[]
+
+  @@unique([sportId, name])
+}
+
+model Tournament {
+  id            String           @id @default(uuid())
+  name          String
+  venue         String
+  city          String?
+  startDate     DateTime
+  endDate       DateTime
+  status        TournamentStatus @default(DRAFT)
+  sportId       String
+  sport         Sport            @relation(fields: [sportId], references: [id])
+  pointsGold    Int              @default(9)
+  pointsSilver  Int              @default(3)
+  pointsBronze  Int              @default(1)
+  description   String?
+  createdAt     DateTime         @default(now())
+  weightDivs    WeightDivision[]
+  ageGroups     AgeGroup[]
+  categories    Category[]
+  registrations Registration[]
+  mats          Mat[]
+}
+
+model WeightDivision {
+  id           String     @id @default(uuid())
+  tournamentId String
+  tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  name         String
+  minKg        Float? // null = sin mínimo
+  maxKg        Float? // null = absoluto / sin máximo
+  gender       Gender? // null = aplica a todos
+  order        Int        @default(0)
+  categories   Category[]
+}
+
+model AgeGroup {
+  id           String     @id @default(uuid())
+  tournamentId String
+  tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  name         String
+  minAge       Int
+  maxAge       Int
+  order        Int        @default(0)
+  categories   Category[]
+}
+
+model Category {
+  id               String          @id @default(uuid())
+  tournamentId     String
+  tournament       Tournament      @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  name             String
+  gender           Gender
+  weightDivisionId String?
+  weightDivision   WeightDivision? @relation(fields: [weightDivisionId], references: [id], onDelete: SetNull)
+  ageGroupId       String?
+  ageGroup         AgeGroup?       @relation(fields: [ageGroupId], references: [id], onDelete: SetNull)
+  beltLevelId      String?
+  beltLevel        BeltLevel?      @relation(fields: [beltLevelId], references: [id], onDelete: SetNull)
+  belts            CategoryBelt[] // cinturones agrupados (opcional, ej. blanca+azul)
+  format           BracketFormat   @default(SINGLE_ELIMINATION)
+  status           CategoryStatus  @default(OPEN)
+  avoidSameAcademy Boolean         @default(true)
+  tiebreakRules    String          @default("WINS,HEAD_TO_HEAD,METHOD_POINTS,DRAW")
+  matId            String?
+  mat              Mat?            @relation(fields: [matId], references: [id], onDelete: SetNull)
+  scheduledAt      DateTime?
+  order            Int             @default(0)
+  durationSec      Int?
+  registrations    Registration[]
+  matches          Match[]
+  createdAt        DateTime        @default(now())
+
+  @@index([tournamentId])
+}
+
+model CategoryBelt {
+  categoryId String
+  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  beltId     String
+  belt       BeltLevel @relation(fields: [beltId], references: [id], onDelete: Cascade)
+
+  @@id([categoryId, beltId])
+}
+
+model Academy {
+  id           String    @id @default(uuid())
+  name         String    @unique
+  abbreviation String?
+  city         String?
+  color        String?
+  athletes     Athlete[]
+  createdAt    DateTime  @default(now())
+}
+
+model Athlete {
+  id            String         @id @default(uuid())
+  firstName     String
+  lastName      String
+  document      String         @unique
+  birthDate     DateTime
+  gender        Gender
+  beltLevelId   String?
+  beltLevel     BeltLevel?     @relation(fields: [beltLevelId], references: [id], onDelete: SetNull)
+  academyId     String?
+  academy       Academy?       @relation(fields: [academyId], references: [id], onDelete: SetNull)
+  email         String?
+  phone         String?
+  registrations Registration[]
+  createdAt     DateTime       @default(now())
+}
+
+model Registration {
+  id             String        @id @default(uuid())
+  tournamentId   String
+  tournament     Tournament    @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  athleteId      String
+  athlete        Athlete       @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  categoryId     String?
+  category       Category?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  declaredWeight Float?
+  weightKg       Float?
+  weighInStatus  WeighInStatus @default(PENDING)
+  weighedAt      DateTime?
+  seed           Int?
+  notes          String?
+  createdAt      DateTime      @default(now())
+  redMatches     Match[]       @relation("RedCorner")
+  blueMatches    Match[]       @relation("BlueCorner")
+  wonMatches     Match[]       @relation("Winner")
+
+  @@unique([tournamentId, athleteId])
+  @@index([categoryId])
+}
+
+model Mat {
+  id           String          @id @default(uuid())
+  tournamentId String
+  tournament   Tournament      @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  name         String
+  order        Int             @default(0)
+  color        String?
+  categories   Category[]
+  matches      Match[]
+  assignments  MatAssignment[]
+}
+
+model MatAssignment {
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  matId  String
+  mat    Mat    @relation(fields: [matId], references: [id], onDelete: Cascade)
+
+  @@id([userId, matId])
+}
+
+model Match {
+  id              String         @id @default(uuid())
+  categoryId      String
+  category        Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  side            BracketSide    @default(WINNERS)
+  round           Int
+  position        Int // índice dentro de la ronda
+  label           String? // ej. "Final", "Semifinal 1"
+  order           Int            @default(0) // orden global dentro de la categoría
+  redId           String?
+  red             Registration?  @relation("RedCorner", fields: [redId], references: [id], onDelete: SetNull)
+  blueId          String?
+  blue            Registration?  @relation("BlueCorner", fields: [blueId], references: [id], onDelete: SetNull)
+  winnerId        String?
+  winner          Registration?  @relation("Winner", fields: [winnerId], references: [id], onDelete: SetNull)
+  victoryMethodId String?
+  victoryMethod   VictoryMethod? @relation(fields: [victoryMethodId], references: [id], onDelete: SetNull)
+  status          MatchStatus    @default(PENDING)
+  // avance
+  nextMatchId     String?
+  nextSlot        String? // "red" | "blue"
+  loserNextId     String?
+  loserNextSlot   String?
+  // programación
+  matId           String?
+  mat             Mat?           @relation(fields: [matId], references: [id], onDelete: SetNull)
+  matOrder        Int?
+  scheduledAt     DateTime?
+  startedAt       DateTime?
+  finishedAt      DateTime?
+  resultById      String?
+  resultBy        User?          @relation("ResultBy", fields: [resultById], references: [id], onDelete: SetNull)
+  audits          ResultAudit[]
+  updatedAt       DateTime       @updatedAt
+
+  @@index([categoryId])
+  @@index([matId, status])
+}
+
+model ResultAudit {
+  id               String   @id @default(uuid())
+  matchId          String
+  match            Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  userId           String?
+  user             User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  previousWinnerId String?
+  previousMethodId String?
+  previousStatus   String?
+  newWinnerId      String?
+  newMethodId      String?
+  newStatus        String?
+  reason           String?
+  createdAt        DateTime @default(now())
+}

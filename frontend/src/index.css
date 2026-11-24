@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------------------
+   Tokens de color — "Tatami & Obi"
+   Claro: papel washi cálido. Oscuro: gris azulado profundo (nunca negro puro).
+   Todos los pares texto/fondo cumplen WCAG AA (≥ 4.5:1).
+--------------------------------------------------------------------------- */
+:root {
+  --c-bg: 244 241 234;        /* #f4f1ea papel */
+  --c-surface: 255 253 248;   /* #fffdf8 */
+  --c-elevated: 236 232 222;  /* #ece8de */
+  --c-line: 214 210 200;      /* #d6d2c8 */
+  --c-ink: 31 36 51;          /* #1f2433 tinta sumi */
+  --c-muted: 92 98 112;       /* #5c6270 (5.9:1 sobre bg) */
+  --c-shu: 178 42 48;         /* #b22a30 bermellón (5.6:1 sobre papel) */
+  --c-ai: 42 77 143;          /* #2a4d8f índigo (7.2:1) */
+  --c-tatami: 46 110 74;      /* #2e6e4a verde (5.5:1) */
+  --c-gold: 122 88 10;        /* #7a580a (≥5:1 incluso sobre gold/15) */
+  --c-silver: 100 106 118;    /* #646a76 */
+  --c-bronze: 142 84 40;      /* #8e5428 */
+  --c-warn: 138 76 6;         /* #8a4c06 */
+  --c-on-accent: 255 255 255; /* texto sobre shu/ai/tatami */
+  color-scheme: light;
+}
+:root[data-theme='dark'] {
+  --c-bg: 21 24 31;           /* #15181f */
+  --c-surface: 30 34 43;      /* #1e222b */
+  --c-elevated: 40 45 56;     /* #282d38 */
+  --c-line: 58 64 78;         /* #3a404e */
+  --c-ink: 233 230 223;       /* #e9e6df (14:1) */
+  --c-muted: 165 170 182;     /* #a5aab6 (7.5:1) */
+  --c-shu: 236 106 110;       /* #ec6a6e (6.4:1) */
+  --c-ai: 126 162 232;        /* #7ea2e8 (7.6:1) */
+  --c-tatami: 104 190 140;    /* #68be8c (8.9:1) */
+  --c-gold: 232 184 72;       /* #e8b848 */
+  --c-silver: 178 184 196;    /* #b2b8c4 */
+  --c-bronze: 214 140 86;     /* #d68c56 */
+  --c-warn: 240 170 70;       /* #f0aa46 */
+  --c-on-accent: 21 24 31;    /* en oscuro los acentos son claros: texto oscuro (≥5:1) */
+  color-scheme: dark;
+}
+
+@layer base {
+  html { font-size: 100%; -webkit-text-size-adjust: 100%; }
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+    font-size: 1rem;
+    line-height: 1.55;
+    min-height: 100dvh;
+  }
+  h1, h2, h3, h4 { @apply font-display font-bold tracking-tight; text-wrap: balance; }
+  :focus-visible { outline: 3px solid rgb(var(--c-ai)); outline-offset: 2px; border-radius: 4px; }
+  ::selection { background: rgb(var(--c-shu) / 0.25); }
+  button, [role='button'] { touch-action: manipulation; }
+  input, select, textarea { font-size: 1rem; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  }
+}
+
+@layer components {
+  .card { @apply relative bg-surface border border-line rounded-dojo shadow-card; }
+  /* Franja "obi": una banda vertical de color a la izquierda */
+  .obi { position: relative; }
+  .obi::before { content: ''; position: absolute; left: 0; top: 10px; bottom: 10px; width: 4px; border-radius: 4px; background: var(--obi, rgb(var(--c-shu))); }
+  .label { @apply text-xs font-semibold uppercase tracking-wider text-muted; }
+  .input { @apply w-full min-h-touch rounded-lg border border-line bg-surface px-3 py-2 text-ink placeholder:text-muted/70 focus:border-ai focus:ring-0; }
+  .btn { @apply inline-flex items-center justify-center gap-2 min-h-touch px-4 rounded-lg font-semibold transition-[background-color,transform,box-shadow] duration-150 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none select-none; }
+  .btn-primary { @apply btn bg-shu text-on-accent hover:brightness-110 shadow-card; }
+  .btn-secondary { @apply btn bg-elevated text-ink hover:bg-line/70 border border-line; }
+  .btn-ghost { @apply btn text-ink hover:bg-elevated; }
+  .btn-ai { @apply btn bg-ai text-on-accent hover:brightness-110; }
+  .btn-tatami { @apply btn bg-tatami text-on-accent hover:brightness-110; }
+  .tatami-weave {
+    background-image: repeating-linear-gradient(90deg, rgb(var(--c-ink) / 0.035) 0 1px, transparent 1px 7px), repeating-linear-gradient(0deg, rgb(var(--c-ink) / 0.025) 0 1px, transparent 1px 7px);
+  }
+  .skeleton { @apply animate-pulse rounded-md bg-elevated; }
+  .num { @apply font-mono tabular-nums; }
+  .scrollbar-thin { scrollbar-width: thin; }
+  /* Pestañas desplazables: el borde derecho se desvanece para indicar que hay más (el último elemento queda visible al llegar al final) */
+  .tabs-scroll { mask-image: linear-gradient(90deg, #000 calc(100% - 40px), transparent); -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 40px), transparent); }
+  .tabs-scroll { scroll-padding-inline-end: 40px; }
+  @media (min-width: 1024px) { .tabs-scroll { mask-image: none; -webkit-mask-image: none; } }
+}

@@ -1,0 +1,88 @@
+# Blueprint de Render para la demo pública de Zenkai Dojo (plan gratuito).
+# Referencia: https://render.com/docs/blueprint-spec
+# Guía paso a paso: DEPLOY.md
+#
+# Las variables con `sync: false` las pide Render SOLO al crear el Blueprint por primera vez;
+# después se cambian en el panel (servicio → Environment). Nunca escribas secretos en este archivo.
+
+services:
+  # ---------- API (Fastify + Prisma) ----------
+  - type: web
+    name: zenkai-dojo-api
+    runtime: node
+    plan: free
+    # Usa la misma región que el proyecto de Neon (Ohio ↔ AWS US East 2). En Europa: frankfurt ↔ AWS EU Central 1
+    region: ohio
+    rootDir: backend
+    # --include=dev: con NODE_ENV=production npm ci omitiría TypeScript y el CLI de Prisma, necesarios para compilar y migrar
+    buildCommand: npm ci --include=dev && npx prisma generate && npm run build
+    # Migraciones → seed de demo SOLO si la base está vacía (nunca borra datos) → servidor
+    startCommand: npx prisma migrate deploy && node dist/prisma/seed-if-empty.js && node dist/src/server.js
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      # Neon → "Pooled connection" (host con -pooler), con ?sslmode=require
+      - key: DATABASE_URL
+        sync: false
+      # Neon → conexión directa (host sin -pooler), con ?sslmode=require. La usa `prisma migrate deploy`
+      - key: DIRECT_URL
+        sync: false
+      # URL exacta del sitio estático, sin barra final (ej. https://zenkai-dojo.onrender.com)
+      - key: CORS_ORIGIN
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 12h
+      # Render pone un proxy delante: la IP real del cliente llega en X-Forwarded-For (límite de intentos de login)
+      - key: TRUST_PROXY
+        value: "true"
+      - key: DOCS_ENABLED
+        value: "true"
+      - key: SEED_ON_START
+        value: "true"
+      # Credenciales de la demo (las que compartirás con los clientes). Mínimo 6 caracteres
+      - key: SEED_ADMIN_EMAIL
+        sync: false
+      - key: SEED_ADMIN_PASSWORD
+        sync: false
+      - key: SEED_TABLE_PASSWORD
+        sync: false
+
+  # ---------- Web (React + Vite, sitio estático) ----------
+  - type: web
+    name: zenkai-dojo
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      # URL del backend, sin barra final (ej. https://zenkai-dojo-api.onrender.com).
+      # Se incrusta al compilar: si la cambias, vuelve a desplegar el sitio
+      - key: VITE_API_URL
+        sync: false
+    # SPA: cualquier ruta sin archivo propio devuelve index.html (los archivos existentes tienen prioridad)
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
