@@ -8,7 +8,7 @@
 services:
   # ---------- API (Fastify + Prisma) ----------
   - type: web
-    name: zenkai-dojo-api
+    name: torneo-dojo-api
     runtime: node
     plan: free
     # Usa la misma región que el proyecto de Neon (Ohio ↔ AWS US East 2). En Europa: frankfurt ↔ AWS EU Central 1
@@ -31,7 +31,7 @@ services:
       # Neon → conexión directa (host sin -pooler), con ?sslmode=require. La usa `prisma migrate deploy`
       - key: DIRECT_URL
         sync: false
-      # URL exacta del sitio estático, sin barra final (ej. https://zenkai-dojo.onrender.com)
+      # URL exacta del sitio estático, sin barra final (ej. https://torneo-dojo.onrender.com)
       - key: CORS_ORIGIN
         sync: false
       - key: JWT_SECRET
@@ -55,7 +55,7 @@ services:
 
   # ---------- Web (React + Vite, sitio estático) ----------
   - type: web
-    name: zenkai-dojo
+    name: torneo-dojo
     runtime: static
     rootDir: frontend
     buildCommand: npm ci && npm run build
@@ -64,7 +64,7 @@ services:
     envVars:
       - key: NODE_VERSION
         value: "22"
-      # URL del backend, sin barra final (ej. https://zenkai-dojo-api.onrender.com).
+      # URL del backend, sin barra final (ej. https://torneo-dojo-api.onrender.com).
       # Se incrusta al compilar: si la cambias, vuelve a desplegar el sitio
       - key: VITE_API_URL
         sync: false
