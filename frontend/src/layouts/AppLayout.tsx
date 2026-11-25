@@ -27,7 +27,7 @@ export function AppLayout({ items, role, title }: { items: NavItem[]; role: Role
     <div className="flex min-h-dvh">
       <a href="#contenido" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-surface focus:px-4 focus:py-2">Saltar al contenido</a>
       <aside className="hidden w-64 shrink-0 flex-col border-r border-line bg-surface lg:flex">
-        <div className="flex h-16 items-center px-5"><Link to="/" aria-label="Zenkai Dojo, inicio"><Logo /></Link></div>
+        <div className="flex h-16 items-center px-5"><Link to="/" aria-label="Torneo Dojo, inicio"><Logo /></Link></div>
         <div className="px-5 pb-2"><span className="label">{title}</span></div>
         <nav className="flex-1 space-y-1 px-3" aria-label={title}>{items.map((it) => <NavLink key={it.to} to={it.to} end={it.end} className={link}>{it.icon}{it.label}</NavLink>)}</nav>
         <div className="border-t border-line p-3">
@@ -41,7 +41,7 @@ export function AppLayout({ items, role, title }: { items: NavItem[]; role: Role
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-40 flex h-16 items-center justify-between gap-3 border-b border-line bg-bg/85 px-4 backdrop-blur lg:hidden">
-          <Link to="/" aria-label="Zenkai Dojo, inicio"><Logo /></Link>
+          <Link to="/" aria-label="Torneo Dojo, inicio"><Logo /></Link>
           <div className="flex items-center gap-1">
             <ThemeToggle />
             <button className="btn-ghost h-11 w-11 px-0" onClick={() => setOpen(true)} aria-label="Abrir menú" aria-expanded={open}><Menu className="h-5 w-5" /></button>

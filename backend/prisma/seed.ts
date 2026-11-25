@@ -32,8 +32,8 @@ async function main() {
 
   console.log('👤 Usuarios…');
   const admin = await prisma.user.create({ data: { email: cred.adminEmail, name: 'Administración', role: 'ADMIN', passwordHash: await bcrypt.hash(cred.adminPassword, 10) } });
-  const mesa1 = await prisma.user.create({ data: { email: 'mesa@zenkai.dojo', name: 'Mesa Tatami 1', role: 'TABLE', passwordHash: await bcrypt.hash(cred.tablePassword, 10) } });
-  const mesa2 = await prisma.user.create({ data: { email: 'mesa2@zenkai.dojo', name: 'Mesa Tatami 2', role: 'TABLE', passwordHash: await bcrypt.hash(cred.tablePassword, 10) } });
+  const mesa1 = await prisma.user.create({ data: { email: 'mesa@torneo.dojo', name: 'Mesa Tatami 1', role: 'TABLE', passwordHash: await bcrypt.hash(cred.tablePassword, 10) } });
+  const mesa2 = await prisma.user.create({ data: { email: 'mesa2@torneo.dojo', name: 'Mesa Tatami 2', role: 'TABLE', passwordHash: await bcrypt.hash(cred.tablePassword, 10) } });
 
   console.log('🥋 Deporte: Jiu-Jitsu Brasileño…');
   const bjj = await prisma.sport.create({
@@ -79,7 +79,7 @@ async function main() {
 
   console.log('🏯 Academias…');
   const academyData = [
-    { name: 'Zenkai Dojo Central', abbreviation: 'ZDC', city: 'Madrid', color: '#c8373b' },
+    { name: 'Dojo Central Madrid', abbreviation: 'DCM', city: 'Madrid', color: '#c8373b' },
     { name: 'Gracie Norte', abbreviation: 'GRN', city: 'Bilbao', color: '#2a63c9' },
     { name: 'Alliance Sur', abbreviation: 'ALS', city: 'Sevilla', color: '#2e9e5b' },
     { name: 'Checkmat Levante', abbreviation: 'CKL', city: 'Valencia', color: '#f2c230' },
@@ -92,7 +92,7 @@ async function main() {
   const start = new Date('2026-11-21T09:00:00Z');
   const tournament = await prisma.tournament.create({
     data: {
-      name: 'Zenkai Open 2026', venue: 'Pabellón Municipal Shiro', city: 'Madrid', startDate: start, endDate: new Date('2026-11-22T20:00:00Z'),
+      name: 'Open de Madrid 2026', venue: 'Pabellón Municipal Shiro', city: 'Madrid', startDate: start, endDate: new Date('2026-11-22T20:00:00Z'),
       status: 'IN_PROGRESS', sportId: bjj.id, pointsGold: 9, pointsSilver: 3, pointsBronze: 1,
       description: 'Torneo abierto de Jiu-Jitsu con kimono. Categorías adulto y master, todos los cinturones.',
       ageGroups: { create: [{ name: 'Juvenil', minAge: 16, maxAge: 17, order: 1 }, { name: 'Adulto', minAge: 18, maxAge: 29, order: 2 }, { name: 'Master', minAge: 30, maxAge: 99, order: 3 }] },
@@ -227,8 +227,8 @@ async function main() {
   // Las contraseñas solo se imprimen si son las de desarrollo (nunca las de producción en los logs)
   const pw = (p: string) => (cred.fromEnv ? '(contraseña de las variables SEED_*)' : p);
   console.log(`   ${cred.adminEmail} / ${pw(cred.adminPassword)}   (Administrador)`);
-  console.log(`   mesa@zenkai.dojo  / ${pw(cred.tablePassword)}    (Mesa — Tatami 1)`);
-  console.log(`   mesa2@zenkai.dojo / ${pw(cred.tablePassword)}    (Mesa — Tatamis 2 y 3)`);
+  console.log(`   mesa@torneo.dojo  / ${pw(cred.tablePassword)}    (Mesa — Tatami 1)`);
+  console.log(`   mesa2@torneo.dojo / ${pw(cred.tablePassword)}    (Mesa — Tatamis 2 y 3)`);
   void admin;
 }
 

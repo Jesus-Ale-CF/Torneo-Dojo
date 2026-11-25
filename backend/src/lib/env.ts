@@ -43,7 +43,7 @@ export function parseEnv(source: NodeJS.ProcessEnv): Env {
   const origin = (raw.CORS_ORIGIN ?? (prod ? '' : '*')).trim();
   let CORS_ORIGINS: true | string[];
   if (origin === '*') {
-    if (prod) throw new Error('CORS_ORIGIN no puede ser `*` en producción: indica la URL exacta del frontend (ej. https://zenkai-dojo.onrender.com).');
+    if (prod) throw new Error('CORS_ORIGIN no puede ser `*` en producción: indica la URL exacta del frontend (ej. https://torneo-dojo.onrender.com).');
     CORS_ORIGINS = true;
   } else {
     CORS_ORIGINS = origin.split(',').map((o) => o.trim().replace(/\/+$/, '')).filter(Boolean);

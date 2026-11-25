@@ -1,4 +1,4 @@
-# Desplegar la demo de Zenkai Dojo (gratis, 24/7)
+# Desplegar la demo de Torneo Dojo (gratis, 24/7)
 
 Guía paso a paso para publicar una demo que los posibles clientes puedan probar libremente:
 
@@ -25,9 +25,9 @@ Prepara también las **credenciales de la demo** (las que darás a los clientes)
 
 | Variable | Ejemplo (invéntate las tuyas) |
 |---|---|
-| `SEED_ADMIN_EMAIL` | `demo@zenkai.dojo` |
+| `SEED_ADMIN_EMAIL` | `demo@torneo.dojo` |
 | `SEED_ADMIN_PASSWORD` | `Dojo-Demo-2026` |
-| `SEED_TABLE_PASSWORD` | `Mesa-Demo-2026` (para `mesa@zenkai.dojo` y `mesa2@zenkai.dojo`) |
+| `SEED_TABLE_PASSWORD` | `Mesa-Demo-2026` (para `mesa@torneo.dojo` y `mesa2@torneo.dojo`) |
 
 ---
 
@@ -75,19 +75,19 @@ Guárdalas en un gestor de contraseñas: las vas a pegar en Render.
 
 1. Entra en <https://render.com> → **Get Started** → regístrate con GitHub y autoriza el acceso al repositorio `zenkai-dojo`.
 2. **New → Blueprint** → elige el repositorio → rama `main`. Render lee `render.yaml` y muestra dos servicios:
-   - `zenkai-dojo-api` (Web Service, Free)
-   - `zenkai-dojo` (Static Site)
+   - `torneo-dojo-api` (Web Service, Free)
+   - `torneo-dojo` (Static Site)
 3. Render pide las variables marcadas como `sync: false`. Rellénalas así:
 
 | Servicio | Variable | Valor |
 |---|---|---|
-| zenkai-dojo-api | `DATABASE_URL` | cadena **con** `-pooler` de Neon |
-| zenkai-dojo-api | `DIRECT_URL` | cadena **sin** `-pooler` de Neon |
-| zenkai-dojo-api | `CORS_ORIGIN` | `https://zenkai-dojo.onrender.com` (provisional, ver paso 4) |
-| zenkai-dojo-api | `SEED_ADMIN_EMAIL` | el correo de la demo |
-| zenkai-dojo-api | `SEED_ADMIN_PASSWORD` | la contraseña de administración de la demo |
-| zenkai-dojo-api | `SEED_TABLE_PASSWORD` | la contraseña de las mesas |
-| zenkai-dojo | `VITE_API_URL` | `https://zenkai-dojo-api.onrender.com` (provisional, ver paso 4) |
+| torneo-dojo-api | `DATABASE_URL` | cadena **con** `-pooler` de Neon |
+| torneo-dojo-api | `DIRECT_URL` | cadena **sin** `-pooler` de Neon |
+| torneo-dojo-api | `CORS_ORIGIN` | `https://torneo-dojo.onrender.com` (provisional, ver paso 4) |
+| torneo-dojo-api | `SEED_ADMIN_EMAIL` | el correo de la demo |
+| torneo-dojo-api | `SEED_ADMIN_PASSWORD` | la contraseña de administración de la demo |
+| torneo-dojo-api | `SEED_TABLE_PASSWORD` | la contraseña de las mesas |
+| torneo-dojo | `VITE_API_URL` | `https://torneo-dojo-api.onrender.com` (provisional, ver paso 4) |
 
    `JWT_SECRET` lo genera Render solo (valor aleatorio); `NODE_ENV`, `NODE_VERSION=22`, `TRUST_PROXY`, `DOCS_ENABLED` y `SEED_ON_START` ya vienen en el Blueprint.
 
@@ -99,14 +99,14 @@ Guárdalas en un gestor de contraseñas: las vas a pegar en Render.
 
 ## 4. Orden correcto: primero el backend, luego las URL reales
 
-Las URL `https://zenkai-dojo-api.onrender.com` y `https://zenkai-dojo.onrender.com` son las esperadas, pero si el nombre ya está cogido Render añade un sufijo (p. ej. `zenkai-dojo-api-x7k2.onrender.com`). Por eso:
+Las URL `https://torneo-dojo-api.onrender.com` y `https://torneo-dojo.onrender.com` son las esperadas, pero si el nombre ya está cogido Render añade un sufijo (p. ej. `torneo-dojo-api-x7k2.onrender.com`). Por eso:
 
-1. Espera a que **zenkai-dojo-api** esté **Live**. Abre `https://<tu-api>.onrender.com/health` → debe responder `{"ok":true,…}`.
+1. Espera a que **torneo-dojo-api** esté **Live**. Abre `https://<tu-api>.onrender.com/health` → debe responder `{"ok":true,…}`.
 2. Copia la **URL real del backend** (arriba en la página del servicio).
-3. Abre **zenkai-dojo** (Static Site) y copia su **URL real**.
+3. Abre **torneo-dojo** (Static Site) y copia su **URL real**.
 4. Si alguna no coincide con lo que pusiste:
-   - En **zenkai-dojo-api → Environment**: `CORS_ORIGIN` = URL real del sitio estático, **sin barra final** → guarda eligiendo la opción que vuelve a desplegar (*Save and deploy* / *Save, rebuild, and deploy*).
-   - En **zenkai-dojo → Environment**: `VITE_API_URL` = URL real del backend, **sin barra final** → guarda y **recompila** (*Save, rebuild, and deploy*; si no aparece, **Manual Deploy → Clear build cache & deploy**). Esta variable se incrusta al compilar: siempre hay que recompilar el sitio después de cambiarla.
+   - En **torneo-dojo-api → Environment**: `CORS_ORIGIN` = URL real del sitio estático, **sin barra final** → guarda eligiendo la opción que vuelve a desplegar (*Save and deploy* / *Save, rebuild, and deploy*).
+   - En **torneo-dojo → Environment**: `VITE_API_URL` = URL real del backend, **sin barra final** → guarda y **recompila** (*Save, rebuild, and deploy*; si no aparece, **Manual Deploy → Clear build cache & deploy**). Esta variable se incrusta al compilar: siempre hay que recompilar el sitio después de cambiarla.
 5. Si ya coincidían, no hace falta nada más.
 
 ---
@@ -116,7 +116,7 @@ Las URL `https://zenkai-dojo-api.onrender.com` y `https://zenkai-dojo.onrender.c
 1. `https://<tu-api>.onrender.com/health` → `{"ok":true,…}`
 2. `https://<tu-api>.onrender.com/docs` → documentación Swagger (si no quieres que sea pública: `DOCS_ENABLED=false` en el backend).
 3. `https://<tu-web>.onrender.com`:
-   - Inicio → **Ver torneos** → *Zenkai Open 2026* → una categoría → la llave se ve.
+   - Inicio → **Ver torneos** → *Open de Madrid 2026* → una categoría → la llave se ve.
    - Recarga (F5) dentro de la categoría: debe seguir cargando (regla de reescritura de la SPA).
    - **Entrar** con `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` → crea un torneo de prueba.
    - En el torneo de ejemplo → pestaña **Exportar** → descarga un PDF y el Excel.
@@ -145,7 +145,7 @@ Un servicio que visite `/health` cada 5 min mantiene despierto el backend (y no 
 **Opción recomendada: cron-job.org (gratis)**
 1. Regístrate en <https://cron-job.org>.
 2. **Create cronjob**:
-   - *Title*: `Zenkai demo health`
+   - *Title*: `Torneo Dojo demo health`
    - *URL*: `https://<tu-api>.onrender.com/health`
    - *Execution schedule*: **Every 5 minutes**
    - (Opcional) *Notifications*: avisar si falla.
@@ -167,7 +167,7 @@ Cuando los clientes hayan jugado con la demo, puedes dejarla como el primer día
 ALLOW_DEMO_RESET=true
 DATABASE_URL="<DIRECT_URL de Neon, la cadena SIN -pooler>"
 DIRECT_URL="<la misma DIRECT_URL>"
-SEED_ADMIN_EMAIL="demo@zenkai.dojo"
+SEED_ADMIN_EMAIL="demo@torneo.dojo"
 SEED_ADMIN_PASSWORD="<la de la demo>"
 SEED_TABLE_PASSWORD="<la de las mesas>"
 ```
@@ -192,11 +192,11 @@ Protecciones: sin `ALLOW_DEMO_RESET=true` el script se niega a borrar nada, y si
 
 Copia y adapta:
 
-> **Demo de Zenkai Dojo** — https://&lt;tu-web&gt;.onrender.com
+> **Demo de Torneo Dojo** — https://&lt;tu-web&gt;.onrender.com
 >
 > - **Vista pública** (sin cuenta): torneos, llaves en vivo, tatamis, medallero y modo TV.
 > - **Administración**: `<SEED_ADMIN_EMAIL>` / `<SEED_ADMIN_PASSWORD>` — crea torneos, inscribe, pesa, genera llaves, exporta PDF y Excel.
-> - **Mesa de control** (mejor en tablet): `mesa@zenkai.dojo` / `<SEED_TABLE_PASSWORD>` (Tatami 1) o `mesa2@zenkai.dojo` (Tatamis 2 y 3).
+> - **Mesa de control** (mejor en tablet): `mesa@torneo.dojo` / `<SEED_TABLE_PASSWORD>` (Tatami 1) o `mesa2@torneo.dojo` (Tatamis 2 y 3).
 >
 > Es una demo gratuita: si nadie la ha usado en un rato, la primera carga puede tardar hasta un minuto. Los datos son ficticios y se restablecen periódicamente; no introduzcas datos personales reales.
 
@@ -206,7 +206,7 @@ Opcional para perfiles técnicos: la API documentada en `https://<tu-api>.onrend
 
 ## Referencia de variables
 
-### Backend (`zenkai-dojo-api`)
+### Backend (`torneo-dojo-api`)
 
 | Variable | Obligatoria en producción | Para qué |
 |---|---|---|
@@ -214,7 +214,7 @@ Opcional para perfiles técnicos: la API documentada en `https://<tu-api>.onrend
 | `DIRECT_URL` | Sí | Conexión directa para migraciones (Neon: sin `-pooler`) |
 | `JWT_SECRET` | Sí (Render la genera) | Firma de sesiones. Sin ella el servidor no arranca |
 | `CORS_ORIGIN` | Sí | URL exacta de la web; varias separadas por comas. `*` no se admite |
-| `SEED_ADMIN_EMAIL` | No (por defecto `admin@zenkai.dojo`) | Correo del administrador de la demo |
+| `SEED_ADMIN_EMAIL` | No (por defecto `admin@torneo.dojo`) | Correo del administrador de la demo |
 | `SEED_ADMIN_PASSWORD`, `SEED_TABLE_PASSWORD` | Sí, si se carga la demo | Contraseñas de la demo (mín. 6 caracteres) |
 | `SEED_ON_START` | No (`true`) | Cargar la demo al arrancar si la base está vacía |
 | `DOCS_ENABLED` | No (`true`) | `false` oculta Swagger en `/docs` |
@@ -224,7 +224,7 @@ Opcional para perfiles técnicos: la API documentada en `https://<tu-api>.onrend
 | `NODE_VERSION` | — | `22` (también `engines` en `package.json` y `.node-version`) |
 | `ALLOW_DEMO_RESET` | — | Solo para `npm run seed:demo:reset` |
 
-### Web (`zenkai-dojo`)
+### Web (`torneo-dojo`)
 
 | Variable | Para qué |
 |---|---|

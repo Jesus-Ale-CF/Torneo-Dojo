@@ -1,7 +1,7 @@
 import { expect, type APIRequestContext, type Locator, type Page } from '@playwright/test';
 
-export const ADMIN = { email: 'admin@zenkai.dojo', password: 'admin123' };
-export const MESA = { email: 'mesa@zenkai.dojo', password: 'mesa123' };
+export const ADMIN = { email: 'admin@torneo.dojo', password: 'admin123' };
+export const MESA = { email: 'mesa@torneo.dojo', password: 'mesa123' };
 export const uid = () => Date.now().toString(36).slice(-5);
 
 // Un token por usuario y proceso: el login tiene límite de intentos (10 cada 15 min por IP y correo)

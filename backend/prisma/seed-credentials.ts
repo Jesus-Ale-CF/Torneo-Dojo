@@ -12,7 +12,7 @@ export interface SeedCredentials {
   fromEnv: boolean;
 }
 
-const DEV = { adminEmail: 'admin@zenkai.dojo', adminPassword: 'admin123', tablePassword: 'mesa123' };
+const DEV = { adminEmail: 'admin@torneo.dojo', adminPassword: 'admin123', tablePassword: 'mesa123' };
 const MIN_LENGTH = 6;
 
 export function seedCredentials(source: NodeJS.ProcessEnv = process.env): SeedCredentials {

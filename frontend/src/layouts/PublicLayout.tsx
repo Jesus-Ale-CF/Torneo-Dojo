@@ -16,7 +16,7 @@ export function PublicLayout() {
       <a href="#contenido" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-surface focus:px-4 focus:py-2">Saltar al contenido</a>
       <header className="sticky top-0 z-40 border-b border-line bg-bg/85 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-screen-2xl items-center justify-between gap-4 px-4">
-          <Link to="/" className="rounded-lg" aria-label="Zenkai Dojo, inicio"><Logo /></Link>
+          <Link to="/" className="rounded-lg" aria-label="Torneo Dojo, inicio"><Logo /></Link>
           <nav className="hidden items-center gap-1 sm:flex" aria-label="Principal">
             {items.map((it) => <NavLink key={it.to} to={it.to} end={'end' in it ? it.end : undefined} className={cls}><it.icon className="h-4 w-4" aria-hidden />{it.label}</NavLink>)}
             <ThemeToggle className="ml-1" />

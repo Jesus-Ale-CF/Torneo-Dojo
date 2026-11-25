@@ -1,12 +1,12 @@
-# MEMORIA.md — Zenkai Dojo
+# MEMORIA.md — Torneo Dojo (antes "Zenkai Dojo")
 
-Documento de traspaso para retomar el trabajo en una sesión nueva. Última actualización: 2026-11-24 (sesión 7: preparado para desplegar la demo gratis en Render + Neon; repositorio git creado). **Estado: proyecto completo y verificado; despliegue pendiente de que el usuario cree las cuentas (ver `DEPLOY.md`).** La documentación de usuario está en `README.md`; este archivo resume el estado interno.
+Documento de traspaso para retomar el trabajo en una sesión nueva. Última actualización: 2026-11-25 (sesión 8: el producto pasa a llamarse **Torneo Dojo** en todo lo visible; manual de usuario nuevo en `docs/manual/Manual_Torneo_Dojo.pdf`). **Estado: proyecto completo y verificado; despliegue pendiente de que el usuario cree las cuentas (ver `DEPLOY.md`).** La documentación de usuario está en `README.md`; este archivo resume el estado interno.
 
 ---
 
 ## 1. Resumen del proyecto
 
-**Zenkai Dojo** es un sistema web para gestionar torneos de deportes de combate (multi-deporte, configurable; Jiu-Jitsu Brasileño precargado): deportes, torneos, categorías (peso × edad × cinturón × género), academias, atletas, inscripciones, pesaje, generación de llaves (4 formatos), tatamis y programación, registro de resultados desde mesa de control, medallero/ranking, vista pública en vivo (polling) con modo TV, y exportación PDF/Excel.
+**Torneo Dojo** (nombre interno del repositorio y de la BD: `zenkai`) es un sistema web para gestionar torneos de deportes de combate (multi-deporte, configurable; Jiu-Jitsu Brasileño precargado): deportes, torneos, categorías (peso × edad × cinturón × género), academias, atletas, inscripciones, pesaje, generación de llaves (4 formatos), tatamis y programación, registro de resultados desde mesa de control, medallero/ranking, vista pública en vivo (polling) con modo TV, y exportación PDF/Excel.
 
 **Roles:** `ADMIN` (control total), `TABLE` (mesa: solo resultados en sus tatamis asignados), público (sin login, solo lectura).
 
@@ -33,7 +33,7 @@ Todo el alcance del encargo está implementado y verificado.
 - [x] axe-core WCAG 2.1 AA: 0 violaciones (había 4 tipos; corregidos)
 - [ ] Lighthouse no se ejecutó; axe cubre las reglas de accesibilidad automatizables
 - [x] Pruebas e2e versionadas en `frontend/e2e` (Playwright, **88 pruebas**): foco en modales con teclado real, creación/validación de formularios y llave con rueda/zoom/arrastre en 5 anchos × 2 temas (sesión 4); navegación pública, Error Boundary, admin, mesa, sesión y tiempo real (sesión 5)
-- [x] Manual de usuario en PDF con capturas (`docs/Manual_de_usuario_Zenkai_Dojo.pdf`, sesión 6)
+- [x] Manual de usuario en PDF con capturas (sesión 6; rehecho en la sesión 8: `docs/manual/Manual_Torneo_Dojo.pdf`, 22 páginas)
 - [x] Repositorio git con commit inicial (sesión 7). **Sin remoto**: el usuario crea el repo en GitHub y hace `git push` (comandos en `DEPLOY.md` §1)
 - [x] Preparado para Render + Neon (sesión 7). **Despliegue real pendiente** (lo hace el usuario en los paneles)
 
@@ -121,9 +121,25 @@ La QA anterior no los detectó porque usaba `fill()` (no simula teclear con foco
 - `WeighInTab`: en móvil el nombre ocupa toda la fila (antes se partía en 3 líneas).
 - **Bug corregido:** importar un CSV UTF-8 rompía los acentos (`AthletesPage` leía el CSV como binario). Ahora los `.csv` se leen como texto.
 
-**3. Manual de usuario en PDF.** `docs/Manual_de_usuario_Zenkai_Dojo.pdf` (43 páginas, 45 capturas). Fuente editable: `docs/manual/manual.html` + `docs/manual/img/*.png`. Se regenera así (app y backend levantados con los datos del seed, desde `frontend/`): `node scripts/manual-shots.mjs` (capturas; `BASE=…` para otra URL) y `node scripts/manual-pdf.mjs` (PDF). El índice del HTML tiene números de página a mano: tras cambiar el contenido hay que repasarlos (comprobados contra el PDF el 2026-11-17). Las capturas usan los datos del seed; si se vuelve a sembrar cambian nombres/estados.
+**3. Manual de usuario en PDF.** *(Sustituido en la sesión 8: ver arriba.)* `docs/Manual_de_usuario_Zenkai_Dojo.pdf` (43 páginas, 45 capturas). Fuente editable: `docs/manual/manual.html` + `docs/manual/img/*.png`. Se regenera así (app y backend levantados con los datos del seed, desde `frontend/`): `node scripts/manual-shots.mjs` (capturas; `BASE=…` para otra URL) y `node scripts/manual-pdf.mjs` (PDF). El índice del HTML tiene números de página a mano: tras cambiar el contenido hay que repasarlos (comprobados contra el PDF el 2026-11-17). Las capturas usan los datos del seed; si se vuelve a sembrar cambian nombres/estados.
 
 **Verificación sesión 6:** `tsc -b` y `npm run build` del frontend, `typecheck` del backend, `npx playwright test` → 88/88 en verde contra Vite. El frontend de Docker (:8080) se reconstruyó con estos cambios.
+
+### Sesión 8: renombrado a "Torneo Dojo" y manual nuevo
+
+**Renombrado (solo lo visible; identificadores internos intactos).** Logo (`Logo.tsx`: Torneo·Dojo), `aria-label` "Torneo Dojo, inicio" (e2e `navigation.spec.ts` actualizado), `<title>` y meta de `index.html`, antetítulo del inicio, lema del login ("Tu torneo, de principio a fin"), Swagger "Torneo Dojo API", log del servidor y del entrypoint, PDF exportados ("TORNEO DOJO", autor), Excel (`creator`, nombre `torneo_dojo_<torneo>.xlsx`). Seed: torneo **"Open de Madrid 2026"**, academia "Dojo Central Madrid" (DCM), correos **`@torneo.dojo`** (`admin@`, `mesa@`, `mesa2@`; también en e2e, tests, `.env.example`, docker-compose, README y DEPLOY). Se dejaron a propósito: BD/rol `zenkai`, proyecto compose `zenkai-dojo`, claves `localStorage` `zenkai-theme`/`zenkai-token` y evento `zenkai:logout` (cambiarlas cerraría sesiones y no se ven), nombres de paquete, carpeta del proyecto y sugerencias de nombre de repo GitHub/proyecto Neon en `DEPLOY.md`. `DEPLOY.md` usa ya los servicios `torneo-dojo-api` / `torneo-dojo` de `render.yaml`.
+
+**Login:** la caja "Credenciales de prueba" solo se muestra con `import.meta.env.DEV` (en la demo publicada las contraseñas son las de `SEED_*` y la caja mostraba otras). Placeholder del correo: `tu@correo.com`.
+
+**Manual** (`docs/manual/`): `manual.html` (fuente, identidad visual de la app: papel washi, bermellón, Zen Kaku Gothic New + Inter + JetBrains Mono) + `img/*.png` (46 capturas) → `Manual_Torneo_Dojo.pdf` (A4, 22 páginas, ~7 MB, índice con enlaces, marcadores y "Página X de Y"). Orden: portada, índice, qué es, primeros pasos, guía del administrador (3.1–3.9), mesa, vista pública, FAQ (8). Se borró `docs/Manual_de_usuario_Zenkai_Dojo.pdf`.
+- Regenerar (desde `frontend/`, con backend + Vite levantados y **datos recién sembrados** — `npm run seed` en backend borra la BD local): `npm run manual` (= `manual:shots` + `manual:pdf`).
+- `scripts/manual-shots.mjs`: escritorio 1440 px (admin), tablet 768 (mesa), móvil 390 (público), modo claro forzado, recuadros dorados numerados (`mark(page, locator, n, side)`; no desplaza la página, el número va en `tl|tr|l|r|b`). Chromium en macOS ignora `--lang` en los `input[type=date|datetime-local]`: `shot()` los convierte a texto dd/mm/aaaa 24 h antes de capturar. La caja de credenciales de desarrollo se quita del DOM. No cambia datos salvo un atleta temporal "Laura Ejemplo Ruiz" para la captura de inscripción, que se borra al momento. Para recortes con coordenadas del documento usar `full: true` + `clip`.
+- `scripts/manual-pdf.mjs`: dos pasadas; lee con `pdfjs-dist` (devDependency nueva) la página de cada destino `#c1`, `#s3-2`… y rellena `.pg` del índice (ya no hay números a mano). Falla si una página se mueve entre pasadas.
+- Revisión: cada página renderizada y revisada; texto extraído del PDF sin "Zenkai" ni contraseñas.
+
+**Verificación sesión 8:** backend `typecheck` + 60 tests; frontend `typecheck` + `build`; `npx playwright test` → 88/88 contra Vite con el seed nuevo. La BD local de desarrollo se volvió a sembrar (datos nuevos). El stack de Docker (:8080/:4100) **no** se reconstruyó: sigue con el código y los datos antiguos.
+
+**Pendiente para el usuario:** `git push` para que Render despliegue. Si la BD de Neon ya estaba sembrada, seguirá mostrando "Zenkai Open 2026" y `mesa@zenkai.dojo` hasta ejecutar `seed:demo:reset` (`DEPLOY.md` §8); revisar también `SEED_ADMIN_EMAIL` en Render. Las capturas del README (`docs/capturas/`) son antiguas y aún muestran el logo anterior.
 
 ### Sesión 7: preparar el despliegue gratuito (Render + Neon)
 
@@ -166,7 +182,7 @@ Zenkai_Dojo/
 ├─ .env.example                    variables de compose (contraseñas, JWT_SECRET, puertos, SEED_ON_START)
 ├─ .gitignore
 ├─ docs/capturas/                  capturas usadas en el README
-├─ docs/manual/                    manual.html + img/ (fuente del manual); docs/Manual_de_usuario_Zenkai_Dojo.pdf es el resultado
+├─ docs/manual/                    manual.html + img/ (fuente) y Manual_Torneo_Dojo.pdf (resultado; `npm run manual` en frontend)
 ├─ backend/
 │  ├─ Dockerfile                   multi-stage node:22-slim con openssl
 │  ├─ docker-entrypoint.sh         prisma migrate deploy → seed-if-empty → node dist/src/server.js
@@ -213,7 +229,7 @@ Zenkai_Dojo/
    ├─ Dockerfile, nginx.conf       build Vite → nginx; proxy /api y /docs → backend:4000; fallback SPA
    ├─ package.json, vite.config.ts (proxy /api → :4000, alias @, chunks react/motion/query), tailwind.config.js, postcss.config.js, index.html (tema anti-flash), .env.example
    ├─ tsconfig.json                strict + noUnusedLocals/noUnusedParameters
-   ├─ scripts/                     manual-shots.mjs (capturas del manual) y manual-pdf.mjs (genera el PDF)
+   ├─ scripts/                     manual-shots.mjs (capturas del manual) y manual-pdf.mjs (PDF con índice numerado solo; usa pdfjs-dist)
    ├─ playwright.config.ts         e2e; baseURL = E2E_BASE_URL o http://localhost:5173
    ├─ e2e/                         helpers.ts (watchErrors, expectPageAlive…), modals-focus, forms-validation, bracket, navigation, app-tour (*.spec.ts)
    ├─ public/favicon.svg
@@ -317,16 +333,16 @@ Desarrollo local con Docker levantado (sesión 4; en la sesión 5 se hizo al rev
 ### Credenciales de prueba (seed)
 | Rol | Correo | Contraseña | Tatamis |
 |---|---|---|---|
-| Admin | `admin@zenkai.dojo` | `admin123` | todos |
-| Mesa | `mesa@zenkai.dojo` | `mesa123` | Tatami 1 |
-| Mesa | `mesa2@zenkai.dojo` | `mesa123` | Tatamis 2 y 3 |
+| Admin | `admin@torneo.dojo` | `admin123` | todos |
+| Mesa | `mesa@torneo.dojo` | `mesa123` | Tatami 1 |
+| Mesa | `mesa2@torneo.dojo` | `mesa123` | Tatamis 2 y 3 |
 
 En producción (`NODE_ENV=production`, incluido Docker) las contraseñas salen de `SEED_ADMIN_PASSWORD` / `SEED_TABLE_PASSWORD` (Docker las pone por defecto a `admin123` / `mesa123`; en Render las elige el usuario) y el correo admin de `SEED_ADMIN_EMAIL`.
 
 ### Variables de entorno nuevas (sesión 7)
 Backend: `DIRECT_URL` (obligatoria para Prisma; en local igual que `DATABASE_URL`), `DOCS_ENABLED`, `TRUST_PROXY`, `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD`, `SEED_TABLE_PASSWORD`, `ALLOW_DEMO_RESET`. Frontend: `VITE_API_URL` (ya existía en `api.ts`; ahora documentada y usada en todas las llamadas). Tabla completa al final de `DEPLOY.md`.
 
-Torneo seed: "Zenkai Open 2026" (IN_PROGRESS), 8 categorías (SE, SE+bronce, DE, RR), 3 finalizadas, 2 en curso (una con combate IN_PROGRESS en Tatami 1), 2 sin llave, 1 atleta con sobrepeso y 2 sin pesar.
+Torneo seed: "Open de Madrid 2026" (IN_PROGRESS; antes "Zenkai Open 2026"), 8 categorías (SE, SE+bronce, DE, RR), 3 finalizadas, 2 en curso (una con combate IN_PROGRESS en Tatami 1), 2 sin llave, 1 atleta con sobrepeso y 2 sin pesar.
 
 ### docker-compose
 ```bash
@@ -350,6 +366,6 @@ Variables en `.env.example` de la raíz. **Estado al cerrar la sesión 5:** ver 
 - **Bundle de `xlsx`** (≈ 140 kB gzip) se carga solo al importar atletas.
 
 ### Siguiente paso sugerido
-**Inmediato (lo hace el usuario):** crear el repo en GitHub y `git push`, crear el proyecto en Neon y el Blueprint en Render siguiendo `DEPLOY.md`, ajustar `CORS_ORIGIN`/`VITE_API_URL` con las URL reales y configurar el monitor de `/health`. Después, comprobar la demo en línea (recorrido del §5 de `DEPLOY.md`).
+**Inmediato (lo hace el usuario):** `git push` de la sesión 8 y, si la demo ya estaba sembrada, `seed:demo:reset`; crear el repo en GitHub y `git push`, crear el proyecto en Neon y el Blueprint en Render siguiendo `DEPLOY.md`, ajustar `CORS_ORIGIN`/`VITE_API_URL` con las URL reales y configurar el monitor de `/health`. Después, comprobar la demo en línea (recorrido del §5 de `DEPLOY.md`).
 
 Posibles mejoras: restablecer la demo automáticamente (p. ej. GitHub Action programada con secretos), activar los future flags de React Router 6 (v7_startTransition, v7_relativeSplatPath) y probar, añadir el barrido axe a `frontend/e2e`, integrar `test:e2e` en CI, inicializar git, y opcionalmente WebSocket o SSE en vez de polling.

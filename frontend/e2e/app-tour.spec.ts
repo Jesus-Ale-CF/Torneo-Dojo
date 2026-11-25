@@ -68,7 +68,7 @@ test.describe('Mesa y sesión', () => {
   test('un usuario desactivado pierde el acceso en la siguiente petición', async ({ page, request }) => {
     const adminToken = await apiLogin(request, ADMIN);
     const auth = { Authorization: `Bearer ${adminToken}` };
-    const email = `tmp${Date.now().toString(36)}@zenkai.dojo`;
+    const email = `tmp${Date.now().toString(36)}@torneo.dojo`;
     const created = await request.post('/api/users', { headers: auth, data: { name: 'Temporal', email, password: 'temporal123', role: 'TABLE' } });
     expect(created.ok(), await created.text()).toBeTruthy();
     const u = await created.json();

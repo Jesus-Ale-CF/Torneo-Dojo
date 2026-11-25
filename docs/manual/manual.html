@@ -2,519 +2,763 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>Manual de usuario · Zenkai Dojo</title>
+<title>Torneo Dojo · Manual de usuario</title>
+<!--
+  Fuente del manual. Se convierte en docs/manual/Manual_Torneo_Dojo.pdf con `npm run manual` (desde frontend/).
+  Los números del índice (.pg) los rellena el script a partir de los marcadores del PDF: no escribirlos a mano.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
-  @page { size: A4; margin: 18mm 16mm 20mm 16mm; }
-  :root { --ink:#1f2433; --muted:#5c6270; --shu:#b22a30; --ai:#2a4d8f; --line:#d6d2c8; --bg:#f4f1ea; --tatami:#2e6e4a; --warn:#8a4c06; }
+  @page { size: A4; margin: 16mm 16mm 18mm 16mm; }
+  @page cover { margin: 0; }
+  :root {
+    --bg: #f4f1ea; --surface: #fffdf8; --elevated: #ece8de; --line: #d6d2c8; --ink: #1f2433; --muted: #5c6270;
+    --shu: #b22a30; --ai: #2a4d8f; --tatami: #2e6e4a; --gold: #7a580a; --mark: #e0a100; --warn: #8a4c06;
+  }
   * { box-sizing: border-box; }
-  html { font-size: 10.5pt; }
-  body { font-family: -apple-system, "Inter", "Helvetica Neue", Arial, sans-serif; color: var(--ink); line-height: 1.5; margin: 0; }
-  h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.01em; line-height: 1.2; margin: 0; }
-  h1 { font-size: 26pt; }
-  h2 { font-size: 18pt; color: var(--shu); margin: 0 0 10pt; padding-bottom: 6pt; border-bottom: 2px solid var(--shu); break-after: avoid; }
-  h3 { font-size: 13pt; margin: 16pt 0 6pt; break-after: avoid; }
-  h4 { font-size: 11pt; margin: 12pt 0 4pt; color: var(--ai); break-after: avoid; }
-  p { margin: 0 0 7pt; }
-  ul, ol { margin: 0 0 8pt; padding-left: 18pt; }
+  html { font-size: 10.5pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; font-family: Inter, -apple-system, "Helvetica Neue", Arial, sans-serif; color: var(--ink); line-height: 1.5; background: #fff; }
+  h1, h2, h3, h4 { font-family: "Zen Kaku Gothic New", Inter, sans-serif; font-weight: 900; letter-spacing: -0.01em; line-height: 1.2; margin: 0; text-wrap: balance; }
+  h2 { font-size: 21pt; margin: 0 0 4pt; break-after: avoid; }
+  h2 .n { color: var(--shu); margin-right: 6pt; }
+  .lead { color: var(--muted); font-size: 11.5pt; margin: 0 0 12pt; padding-bottom: 10pt; border-bottom: 2px solid var(--shu); }
+  h3 { font-size: 13.5pt; font-weight: 700; margin: 14pt 0 6pt; break-after: avoid; display: flex; align-items: baseline; gap: 6pt; }
+  h3 .n { font-family: "JetBrains Mono", monospace; font-size: 10pt; color: var(--shu); font-weight: 700; }
+  h4 { font-size: 11pt; font-weight: 700; margin: 10pt 0 4pt; break-after: avoid; }
+  p { margin: 0 0 6pt; }
+  ul { margin: 0 0 8pt; padding-left: 15pt; }
   li { margin-bottom: 3pt; }
-  li > ul, li > ol { margin-top: 3pt; }
   strong { font-weight: 700; }
-  code, kbd { font-family: "JetBrains Mono", Menlo, monospace; font-size: 9pt; background: var(--bg); border: 1px solid var(--line); border-radius: 3px; padding: 0 3px; }
-  table { border-collapse: collapse; width: 100%; margin: 6pt 0 10pt; font-size: 9.5pt; break-inside: avoid; }
+  .btn { display: inline-block; font-weight: 600; font-size: 9.5pt; padding: 0 5pt; border-radius: 4px; background: var(--elevated); border: 1px solid var(--line); white-space: nowrap; }
+  .btn.primary { background: var(--shu); color: #fff; border-color: var(--shu); }
+  .chapter { break-before: page; }
+  .keep { break-inside: avoid; }
+
+  /* Pasos numerados */
+  ol.steps { counter-reset: s; list-style: none; padding: 0; margin: 0 0 8pt; }
+  ol.steps > li { counter-increment: s; position: relative; padding-left: 24pt; margin-bottom: 5pt; min-height: 17pt; }
+  ol.steps > li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 17pt; height: 17pt; border-radius: 50%; background: var(--shu); color: #fff; font-weight: 700; font-size: 9pt; display: flex; align-items: center; justify-content: center; }
+  .num-mark { display: inline-flex; width: 13pt; height: 13pt; border-radius: 50%; background: var(--mark); color: var(--ink); font-weight: 800; font-size: 8pt; align-items: center; justify-content: center; vertical-align: 1pt; }
+
+  /* Capturas */
+  figure { margin: 6pt auto 10pt; break-inside: avoid; text-align: center; }
+  figure img { max-width: 100%; display: block; margin: 0 auto; border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 1px 3px rgba(31, 36, 51, .08); }
+  figure.phone img { border-radius: 12px; }
+  figcaption { font-size: 8.8pt; color: var(--muted); margin-top: 4pt; line-height: 1.35; }
+  figcaption b { color: var(--ink); }
+  .row { display: flex; gap: 10pt; align-items: flex-start; justify-content: center; break-inside: avoid; margin: 6pt 0 10pt; }
+  .row figure { margin: 0; flex: 1 1 0; }
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 12pt; align-items: start; break-inside: avoid; }
+  .split.wide-left { grid-template-columns: 1.15fr 1fr; }
+  .split figure { margin-top: 0; }
+
+  /* Avisos */
+  .note { border-left: 4px solid var(--ai); background: #eef2fa; padding: 6pt 10pt; margin: 6pt 0 10pt; border-radius: 0 6px 6px 0; break-inside: avoid; }
+  .note.ok { border-left-color: var(--tatami); background: #eaf4ee; }
+  .note.warn { border-left-color: var(--warn); background: #fbf3e6; }
+  .note p:last-child { margin: 0; }
+  .note .t { font-weight: 700; display: block; margin-bottom: 1pt; }
+
+  /* Tablas */
+  table { border-collapse: collapse; width: 100%; margin: 4pt 0 10pt; font-size: 9.5pt; break-inside: avoid; }
   th, td { border: 1px solid var(--line); padding: 4pt 6pt; vertical-align: top; text-align: left; }
   th { background: var(--bg); font-weight: 700; }
-  .chapter { break-before: page; }
-  .cover { height: 250mm; display: flex; flex-direction: column; justify-content: space-between; }
-  .cover .logo { display: flex; align-items: center; gap: 12pt; }
-  .cover .enso { width: 44pt; height: 44pt; border-radius: 50%; border: 6pt solid var(--shu); border-right-color: transparent; position: relative; }
-  .cover .enso::after { content: ''; position: absolute; left: 50%; top: 50%; width: 6pt; height: 16pt; margin: -8pt 0 0 -3pt; background: var(--ink); border-radius: 2pt; }
-  .cover .title { margin-top: 60mm; }
-  .cover .title .kicker { color: var(--shu); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: 10pt; }
-  .cover .title h1 { font-size: 34pt; margin-top: 6pt; }
-  .cover .title p { font-size: 13pt; color: var(--muted); margin-top: 8pt; max-width: 120mm; }
-  .cover .meta { color: var(--muted); font-size: 9.5pt; border-top: 1px solid var(--line); padding-top: 8pt; }
-  .toc ol { list-style: none; padding: 0; column-count: 1; }
-  .toc li { display: flex; justify-content: space-between; border-bottom: 1px dotted var(--line); padding: 3pt 0; }
-  .toc li.sub { padding-left: 16pt; font-size: 9.5pt; color: var(--muted); }
-  figure { margin: 8pt 0 12pt; break-inside: avoid; }
-  figure img { width: 100%; border: 1px solid var(--line); border-radius: 6px; display: block; }
-  figure.half img, figure.phone img { width: auto; max-width: 100%; }
-  figure.phone { text-align: center; }
-  figure.phone img { height: 128mm; display: inline-block; }
-  figure.phones { display: flex; gap: 8pt; justify-content: center; }
-  figure.phones img { height: 118mm; width: auto; }
-  figcaption { font-size: 9pt; color: var(--muted); margin-top: 4pt; text-align: center; }
-  .note { border-left: 4px solid var(--ai); background: #eef2fa; padding: 6pt 10pt; margin: 8pt 0 10pt; border-radius: 0 6px 6px 0; break-inside: avoid; }
-  .warn { border-left-color: var(--warn); background: #fbf3e6; }
-  .ok { border-left-color: var(--tatami); background: #eaf4ee; }
-  .note p:last-child { margin-bottom: 0; }
-  .steps { counter-reset: s; list-style: none; padding: 0; }
-  .steps > li { counter-increment: s; position: relative; padding-left: 26pt; margin-bottom: 6pt; }
-  .steps > li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 18pt; height: 18pt; border-radius: 50%; background: var(--shu); color: #fff; font-weight: 700; font-size: 9.5pt; display: flex; align-items: center; justify-content: center; }
-  .badge { display: inline-block; border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; font-size: 9pt; font-weight: 600; background: #fff; }
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; }
-  .small { font-size: 9pt; color: var(--muted); }
-  .corner { display: inline-block; width: 8pt; height: 8pt; border-radius: 50%; vertical-align: middle; margin-right: 3pt; }
+
+  /* Portada */
+  .cover { page: cover; height: 297mm; padding: 22mm 20mm 18mm; background: var(--bg); position: relative; overflow: hidden; display: flex; flex-direction: column; }
+  .cover::before { content: ''; position: absolute; inset: 0; opacity: .5;
+    background-image: linear-gradient(rgba(31,36,51,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(31,36,51,.035) 1px, transparent 1px); background-size: 6px 6px; }
+  .cover > * { position: relative; }
+  .cover .bigmark { position: absolute; right: -45mm; top: 55mm; width: 175mm; height: 175mm; opacity: .09; }
+  .brand { display: flex; align-items: center; gap: 9pt; font-family: "Zen Kaku Gothic New", sans-serif; font-weight: 900; font-size: 19pt; letter-spacing: -0.01em; }
+  .brand svg { width: 34pt; height: 34pt; }
+  .brand .dot { color: var(--shu); }
+  .cover .title { margin-top: 62mm; }
+  .cover .kicker { color: var(--shu); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; font-size: 10pt; }
+  .cover h1 { font-size: 40pt; margin-top: 8pt; }
+  .cover h1 span { color: var(--shu); }
+  .cover .sub { font-size: 13pt; color: var(--muted); margin-top: 10pt; max-width: 125mm; }
+  .cover .obi { height: 10pt; width: 70mm; background: var(--ink); border-radius: 2pt; margin-top: 18pt; position: relative; }
+  .cover .obi::after { content: ''; position: absolute; right: 12mm; top: 0; bottom: 0; width: 14mm; background: var(--shu); }
+  .cover .meta { margin-top: auto; display: flex; justify-content: space-between; color: var(--muted); font-size: 9.5pt; border-top: 1px solid var(--line); padding-top: 8pt; }
+  .cover .meta b { color: var(--ink); }
+
+  /* Índice */
+  .toc h2 { margin-bottom: 14pt; }
+  .toc ol { list-style: none; padding: 0; margin: 0; }
+  .toc li { margin: 0; }
+  .toc a { display: flex; align-items: baseline; gap: 6pt; color: var(--ink); text-decoration: none; padding: 4pt 0; }
+  .toc a .dots { flex: 1; border-bottom: 1px dotted #b9b4a8; transform: translateY(-3pt); }
+  .toc a .pg { font-family: "JetBrains Mono", monospace; font-weight: 700; min-width: 16pt; text-align: right; }
+  .toc > ol > li > a { font-weight: 700; font-size: 12pt; padding-top: 9pt; }
+  .toc > ol > li > a .pg { color: var(--shu); }
+  .toc li li a { padding-left: 18pt; font-size: 10pt; color: var(--muted); }
+  .toc li li a .t { color: var(--ink); }
+
+  /* Perfiles */
+  .roles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9pt; margin: 8pt 0 12pt; }
+  .role { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 9pt 10pt 9pt 13pt; position: relative; overflow: hidden; break-inside: avoid; }
+  .role::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5pt; background: var(--c, var(--shu)); }
+  .role h4 { margin: 0 0 3pt; font-size: 12pt; }
+  .role .who { font-size: 8.8pt; color: var(--muted); margin-bottom: 5pt; }
+  .role ul { padding-left: 12pt; font-size: 9.3pt; margin: 0; }
+  .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6pt; margin: 6pt 0 10pt; counter-reset: f; }
+  .flow div { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 6pt 8pt; font-size: 9.2pt; counter-increment: f; }
+  .flow div::before { content: counter(f); display: inline-flex; width: 14pt; height: 14pt; border-radius: 50%; background: var(--ink); color: #fff; font-size: 8pt; font-weight: 700; align-items: center; justify-content: center; margin-right: 5pt; }
+  .flow b { font-weight: 700; }
+
+  /* Preguntas frecuentes */
+  .faq { break-inside: avoid; border: 1px solid var(--line); border-radius: 8px; padding: 8pt 11pt; margin: 0 0 8pt; background: var(--surface); }
+  .faq h4 { margin: 0 0 4pt; font-size: 11pt; color: var(--shu); }
+  .faq p, .faq ul { font-size: 9.8pt; }
+  .faq :last-child { margin-bottom: 0; }
 </style>
 </head>
 <body>
 
 <!-- ============================ PORTADA ============================ -->
 <section class="cover">
-  <div class="logo"><span class="enso"></span><span style="font-size:18pt;font-weight:800">Zenkai·Dojo</span></div>
-  <div class="title">
-    <div class="kicker">全快 · Gestión de torneos de combate</div>
-    <h1>Manual de usuario</h1>
-    <p>Guía completa para la organización, la mesa de control y el público: desde crear un torneo hasta publicar el medallero.</p>
+  <svg class="bigmark" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="26" fill="none" stroke="#b22a30" stroke-width="7" stroke-linecap="round" stroke-dasharray="140 40" transform="rotate(-60 32 32)"/></svg>
+  <div class="brand">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="26" fill="none" stroke="#b22a30" stroke-width="7" stroke-linecap="round" stroke-dasharray="140 40" transform="rotate(-60 32 32)"/><rect x="26" y="20" width="12" height="24" rx="2" fill="#1f2433"/></svg>
+    <span>Torneo<span class="dot">·</span>Dojo</span>
   </div>
-  <div class="meta">Versión 1.1 · Noviembre de 2026 · Capturas tomadas de la aplicación con los datos de demostración.</div>
+  <div class="title">
+    <div class="kicker">Gestión de torneos de deportes de combate</div>
+    <h1>Torneo Dojo —<br><span>Manual de usuario</span></h1>
+    <p class="sub">Guía paso a paso para organizar un torneo, registrar resultados desde la mesa y seguir la competición en vivo.</p>
+    <div class="obi"></div>
+  </div>
+  <div class="meta">
+    <span><b>Versión 2.0</b> · 25 de noviembre de 2026</span>
+    <span>Para administradores, mesas de control y público</span>
+  </div>
 </section>
 
 <!-- ============================ ÍNDICE ============================ -->
 <section class="chapter toc">
   <h2>Índice</h2>
   <ol>
-    <li><span>1. Qué es Zenkai Dojo</span><span>3</span></li>
-    <li class="sub"><span>Quién usa cada parte · Cómo entrar · Tema claro y oscuro · Uso en el móvil</span><span></span></li>
-    <li><span>2. Conceptos básicos</span><span>6</span></li>
-    <li class="sub"><span>Deporte, torneo, categoría, atleta, inscripción, pesaje, llave, tatami, mesa · Estados</span><span></span></li>
-    <li><span>3. Vista pública (sin cuenta)</span><span>8</span></li>
-    <li class="sub"><span>Inicio · Torneos · Ficha del torneo · Categoría y llave · La llave en el teléfono · Modo TV</span><span></span></li>
-    <li><span>4. Iniciar sesión</span><span>16</span></li>
-    <li><span>5. Administración: preparar el sistema</span><span>17</span></li>
-    <li class="sub"><span>Panel de inicio · Deportes · Academias · Usuarios · Atletas e importación desde Excel</span><span></span></li>
-    <li><span>6. Administración: el torneo paso a paso</span><span>22</span></li>
-    <li class="sub"><span>Crear · Resumen · Configuración · Categorías · Inscripciones · Pesaje · Llaves · Tatamis · Auditoría · Exportar</span><span></span></li>
-    <li><span>7. Mesa de control</span><span>36</span></li>
-    <li class="sub"><span>Elegir tatami · Iniciar un combate · Registrar el ganador · Corregir un resultado</span><span></span></li>
-    <li><span>8. Modo TV</span><span>40</span></li>
-    <li><span>9. Preguntas frecuentes y problemas habituales</span><span>41</span></li>
-    <li><span>10. Glosario de estados</span><span>43</span></li>
+    <li><a href="#c1"><span class="t">1. ¿Qué es Torneo Dojo?</span><span class="dots"></span><span class="pg" data-for="c1">0</span></a></li>
+    <li><a href="#c2"><span class="t">2. Primeros pasos</span><span class="dots"></span><span class="pg" data-for="c2">0</span></a>
+      <ol>
+        <li><a href="#s2-1"><span class="t">Entrar en la aplicación</span><span class="dots"></span><span class="pg" data-for="s2-1">0</span></a></li>
+        <li><a href="#s2-2"><span class="t">Iniciar sesión</span><span class="dots"></span><span class="pg" data-for="s2-2">0</span></a></li>
+        <li><a href="#s2-3"><span class="t">Modo claro y modo oscuro</span><span class="dots"></span><span class="pg" data-for="s2-3">0</span></a></li>
+        <li><a href="#s2-4"><span class="t">En el teléfono, la tablet y el ordenador</span><span class="dots"></span><span class="pg" data-for="s2-4">0</span></a></li>
+      </ol>
+    </li>
+    <li><a href="#c3"><span class="t">3. Guía del administrador</span><span class="dots"></span><span class="pg" data-for="c3">0</span></a>
+      <ol>
+        <li><a href="#s3-1"><span class="t">Configurar un deporte</span><span class="dots"></span><span class="pg" data-for="s3-1">0</span></a></li>
+        <li><a href="#s3-2"><span class="t">Crear un torneo</span><span class="dots"></span><span class="pg" data-for="s3-2">0</span></a></li>
+        <li><a href="#s3-3"><span class="t">Crear categorías</span><span class="dots"></span><span class="pg" data-for="s3-3">0</span></a></li>
+        <li><a href="#s3-4"><span class="t">Registrar academias y atletas</span><span class="dots"></span><span class="pg" data-for="s3-4">0</span></a></li>
+        <li><a href="#s3-5"><span class="t">Inscribir atletas y hacer el pesaje</span><span class="dots"></span><span class="pg" data-for="s3-5">0</span></a></li>
+        <li><a href="#s3-6"><span class="t">Generar llaves</span><span class="dots"></span><span class="pg" data-for="s3-6">0</span></a></li>
+        <li><a href="#s3-7"><span class="t">Tatamis, horarios y usuarios de mesa</span><span class="dots"></span><span class="pg" data-for="s3-7">0</span></a></li>
+        <li><a href="#s3-8"><span class="t">Corregir un resultado</span><span class="dots"></span><span class="pg" data-for="s3-8">0</span></a></li>
+        <li><a href="#s3-9"><span class="t">Medallero y exportar a PDF y Excel</span><span class="dots"></span><span class="pg" data-for="s3-9">0</span></a></li>
+      </ol>
+    </li>
+    <li><a href="#c4"><span class="t">4. Guía de la mesa de control</span><span class="dots"></span><span class="pg" data-for="c4">0</span></a></li>
+    <li><a href="#c5"><span class="t">5. Vista pública</span><span class="dots"></span><span class="pg" data-for="c5">0</span></a></li>
+    <li><a href="#c6"><span class="t">6. Preguntas frecuentes y solución de problemas</span><span class="dots"></span><span class="pg" data-for="c6">0</span></a></li>
   </ol>
-  <p class="small">Cada capítulo empieza en una página nueva.</p>
+  <div class="note" style="margin-top:18pt">
+    <span class="t">Cómo leer este manual</span>
+    <p>Las capturas son de la aplicación real con datos de ejemplo. Los <b>recuadros dorados con número</b> <span class="num-mark">1</span> marcan lo que hay que pulsar, en orden. Puedes pulsar cualquier línea de este índice para ir a esa página.</p>
+  </div>
 </section>
 
 <!-- ============================ 1. QUÉ ES ============================ -->
 <section class="chapter">
-  <h2>1. Qué es Zenkai Dojo</h2>
-  <p>Zenkai Dojo es una aplicación web para organizar torneos de deportes de combate (viene preparada para Jiu-Jitsu Brasileño, pero admite cualquier deporte con cinturones o niveles). Cubre todo el ciclo del evento:</p>
+  <h2 id="c1"><span class="n">1</span>¿Qué es Torneo Dojo?</h2>
+  <p class="lead">Una aplicación web para organizar torneos de Jiu-Jitsu, Judo y otros deportes de combate, de la inscripción al podio.</p>
+
+  <p>Con Torneo Dojo preparas el torneo en el ordenador, la mesa de cada tatami anota los resultados desde una tablet y el público sigue las llaves en su teléfono, todo a la vez y sin papeles. <b>No hay que instalar nada</b>: funciona en el navegador.</p>
+
+  <h3>Qué puedes hacer</h3>
   <ul>
-    <li><strong>Antes del torneo:</strong> crear el torneo, definir divisiones de peso y grupos de edad, generar categorías, dar de alta atletas (o importarlos desde Excel) e inscribirlos.</li>
-    <li><strong>El día del torneo:</strong> pesaje, generación de llaves, reparto de categorías en tatamis y registro de resultados desde la mesa de control.</li>
-    <li><strong>Durante y después:</strong> el público sigue las llaves, los tatamis y el medallero en vivo (también en una pantalla grande con el modo TV), y la organización exporta todo a PDF y Excel.</li>
+    <li><b>Antes del torneo:</b> crear el torneo y sus categorías, registrar academias y atletas (también desde Excel) e inscribirlos.</li>
+    <li><b>El día del torneo:</b> pesar a los atletas, generar las llaves, repartir las categorías por tatamis y anotar cada combate.</li>
+    <li><b>Durante y después:</b> el público ve los resultados al momento (también en una pantalla grande con el <b>modo TV</b>) y la organización descarga llaves, horarios y resultados en PDF y Excel.</li>
   </ul>
 
-  <h3>1.1 Quién usa cada parte</h3>
+  <h3>Los 3 tipos de usuario</h3>
+  <div class="roles">
+    <div class="role" style="--c: var(--shu)">
+      <h4>Administrador</h4>
+      <div class="who">La organización del torneo</div>
+      <ul>
+        <li>Configura deportes, torneos y categorías.</li>
+        <li>Registra academias, atletas e inscripciones.</li>
+        <li>Hace el pesaje y genera las llaves.</li>
+        <li>Crea tatamis y usuarios de mesa.</li>
+        <li>Corrige resultados y exporta informes.</li>
+      </ul>
+    </div>
+    <div class="role" style="--c: var(--ai)">
+      <h4>Mesa de control</h4>
+      <div class="who">La persona que anota junto al tatami</div>
+      <ul>
+        <li>Ve solo los tatamis que tiene asignados.</li>
+        <li>Inicia cada combate.</li>
+        <li>Registra el ganador y cómo ganó.</li>
+        <li>Corrige un resultado indicando el motivo.</li>
+      </ul>
+    </div>
+    <div class="role" style="--c: var(--tatami)">
+      <h4>Público</h4>
+      <div class="who">Atletas, familias, entrenadores</div>
+      <ul>
+        <li>No necesita cuenta ni contraseña.</li>
+        <li>Ve torneos, llaves y horarios en vivo.</li>
+        <li>Consulta el medallero y los podios.</li>
+        <li>Descarga los PDF públicos.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Un torneo en 8 pasos</h3>
+  <p>Este es el camino completo. La aplicación te lo recuerda en la pestaña <b>Resumen</b> de cada torneo.</p>
+  <div class="flow">
+    <div><b>Configurar</b> el torneo, sus pesos y edades</div>
+    <div><b>Crear</b> las categorías</div>
+    <div><b>Inscribir</b> a los atletas</div>
+    <div><b>Pesar</b> el día del torneo</div>
+    <div><b>Generar</b> las llaves</div>
+    <div><b>Repartir</b> tatamis y mesas</div>
+    <div><b>Anotar</b> los resultados</div>
+    <div><b>Exportar</b> medallero e informes</div>
+  </div>
+</section>
+
+<!-- ============================ 2. PRIMEROS PASOS ============================ -->
+<section class="chapter">
+  <h2 id="c2"><span class="n">2</span>Primeros pasos</h2>
+  <p class="lead">Cómo abrir la aplicación, entrar con tu cuenta y usarla en cualquier pantalla.</p>
+
+  <div class="split" style="grid-template-columns:1fr 58mm;align-items:center">
+    <div class="note ok" style="margin:0">
+      <span class="t">Si la primera vez tarda en cargar…</span>
+      <p>Espera hasta un minuto: el servidor se está despertando. Verás el aviso «Despertando el servidor» y los datos aparecerán solos, sin recargar la página.</p>
+    </div>
+    <figure style="margin:0">
+      <img src="img/servidor-despertando.png" alt="Aviso de servidor despertando">
+      <figcaption>El aviso desaparece solo.</figcaption>
+    </figure>
+  </div>
+
+  <h3 id="s2-1"><span class="n">2.1</span>Entrar en la aplicación</h3>
+  <ol class="steps">
+    <li>Abre en el navegador (Chrome, Safari, Edge o Firefox) la dirección que te dio la organización.</li>
+    <li>Verás la página de inicio con los torneos en curso. <b>El público no necesita hacer nada más.</b></li>
+    <li>Si eres administrador o mesa, pulsa <span class="btn">Entrar</span> <span class="num-mark">1</span> arriba a la derecha (en el teléfono, abajo).</li>
+  </ol>
+  <figure style="width:135mm">
+    <img src="img/inicio-escritorio.png" alt="Página de inicio">
+    <figcaption><b>Página de inicio.</b> <span class="num-mark">1</span> Entrar, para administración y mesa. <span class="num-mark">2</span> Cambiar entre modo claro y oscuro.</figcaption>
+  </figure>
+
+  <h3 id="s2-2"><span class="n">2.2</span>Iniciar sesión</h3>
+  <div class="split wide-left">
+    <figure>
+      <img src="img/login.png" alt="Pantalla de inicio de sesión">
+      <figcaption><b>Inicio de sesión.</b> Correo <span class="num-mark">1</span>, contraseña <span class="num-mark">2</span> y botón Entrar <span class="num-mark">3</span>.</figcaption>
+    </figure>
+    <div>
+      <ol class="steps">
+        <li>Escribe tu <b>correo electrónico</b>.</li>
+        <li>Escribe tu <b>contraseña</b>. Te la da quien administra el torneo.</li>
+        <li>Pulsa <span class="btn primary">Entrar</span>. Los administradores llegan al <b>Panel</b> y las mesas a la <b>Mesa de control</b>.</li>
+      </ol>
+      <p>Si el correo o la contraseña no son correctos, aparece un aviso en rojo: revisa que no haya espacios ni mayúsculas de más.</p>
+      <p>Para salir, pulsa el icono de la puerta al pie del menú lateral (en el teléfono, en el menú <b>☰</b>).</p>
+    </div>
+  </div>
+
+  <h3 id="s2-3"><span class="n">2.3</span>Modo claro y modo oscuro</h3>
+  <div class="split">
+    <div>
+      <p>El botón del sol o la luna <span class="num-mark">2</span> cambia el aspecto de la aplicación. Cada pulsación pasa por:</p>
+      <ul>
+        <li><b>Automático:</b> sigue el ajuste de tu dispositivo.</li>
+        <li><b>Claro:</b> fondo claro, ideal de día y para imprimir.</li>
+        <li><b>Oscuro:</b> fondo oscuro, más cómodo en pabellones con poca luz o por la noche.</li>
+      </ul>
+      <p>La elección se recuerda en ese dispositivo.</p>
+    </div>
+    <figure>
+      <img src="img/inicio-oscuro.png" alt="Inicio en modo oscuro">
+      <figcaption><b>Modo oscuro.</b> La misma página de inicio con el fondo oscuro.</figcaption>
+    </figure>
+  </div>
+
+  <h3 id="s2-4"><span class="n">2.4</span>En el teléfono, la tablet y el ordenador</h3>
+  <p>La aplicación se adapta sola al tamaño de la pantalla. Recomendamos:</p>
+  <ul>
+    <li><b>Ordenador:</b> para administrar. El menú queda a la izquierda.</li>
+    <li><b>Tablet:</b> para la mesa de control, junto al tatami. Los botones son grandes y fáciles de tocar.</li>
+    <li><b>Teléfono:</b> para el público y para consultas rápidas. El menú pasa a una barra inferior y, en administración, se abre con <b>☰</b>.</li>
+  </ul>
+  <div class="row" style="align-items:flex-end">
+    <figure class="phone" style="flex:0 0 27mm"><img src="img/pub-inicio.png" alt="Teléfono"><figcaption><b>Teléfono</b></figcaption></figure>
+    <figure style="flex:0 0 35mm"><img src="img/tablet-torneo.png" alt="Tablet"><figcaption><b>Tablet</b></figcaption></figure>
+    <figure style="flex:0 0 74mm"><img src="img/adm-inicio.png" alt="Ordenador"><figcaption><b>Ordenador</b></figcaption></figure>
+  </div>
+</section>
+
+<!-- ============================ 3. ADMINISTRADOR ============================ -->
+<section class="chapter">
+  <h2 id="c3"><span class="n">3</span>Guía del administrador</h2>
+  <p class="lead">Todo lo necesario para preparar y dirigir un torneo, en el orden en que se hace.</p>
+
+  <p>El menú de la izquierda tiene las secciones generales (<b>Torneos, Atletas, Academias, Deportes y Usuarios</b>), que sirven para todos los torneos. Dentro de cada torneo hay pestañas para cada paso. Bajo las pestañas siempre hay una línea de ayuda que dice qué hacer ahí y qué viene después.</p>
+  <figure style="width:135mm">
+    <img src="img/adm-resumen.png" alt="Resumen de un torneo con los 8 pasos">
+    <figcaption><b>Resumen del torneo.</b> Los pasos hechos llevan una marca verde y la tarjeta «Siguiente paso» te lleva a lo que falta.</figcaption>
+  </figure>
+
+  <h3 id="s3-1"><span class="n">3.1</span>Configurar un deporte</h3>
+  <p>El deporte define <b>cómo se puede ganar</b> un combate (métodos de victoria) y <b>qué cinturones o niveles</b> existen. Jiu-Jitsu Brasileño y Judo ya vienen preparados: normalmente solo tendrás que revisarlos.</p>
+  <figure style="width:135mm">
+    <img src="img/adm-deportes.png" alt="Lista de deportes">
+    <figcaption><b>Deportes.</b> Cada tarjeta muestra sus métodos de victoria y sus cinturones. <span class="num-mark">1</span> Nuevo deporte.</figcaption>
+  </figure>
+  <div class="split wide-left">
+    <div>
+      <ol class="steps">
+        <li>Entra en <b>Deportes</b> y pulsa <span class="btn primary">Nuevo deporte</span>, o el lápiz de uno existente para editarlo.</li>
+        <li>Escribe el <b>nombre</b> y la <b>duración</b> normal de un combate (en segundos).</li>
+        <li>En <b>Métodos de victoria</b> pulsa <span class="btn">Añadir método</span> <span class="num-mark">1</span> por cada forma de ganar: Sumisión, Puntos, Ventajas… El número de la derecha son los <b>puntos</b> que vale, y solo se usan para desempatar en «todos contra todos».</li>
+        <li>En <b>Cinturones / niveles</b> pulsa <span class="btn">Añadir cinturón</span> <span class="num-mark">2</span>, escribe el nombre y elige su color. Puedes añadir una franja de otro color (como la punta roja del cinturón negro).</li>
+        <li>Pulsa <span class="btn primary">Guardar</span>.</li>
+      </ol>
+      <div class="note"><p>Escribe los cinturones en orden, del más bajo al más alto: es el orden en que aparecerán en filtros y categorías.</p></div>
+    </div>
+    <figure>
+      <img src="img/adm-deporte-form.png" alt="Formulario de deporte" style="max-height:150mm">
+      <figcaption><b>Editar deporte.</b> Métodos de victoria arriba y cinturones abajo.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <h3 id="s3-2"><span class="n">3.2</span>Crear un torneo</h3>
+  <div class="split wide-left">
+    <div>
+      <ol class="steps">
+        <li>En el menú, entra en <b>Torneos</b> y pulsa <span class="btn primary">Nuevo torneo</span> <span class="num-mark">1</span>.</li>
+        <li>Rellena el <b>nombre</b>, la <b>sede</b>, la <b>ciudad</b> y las <b>fechas</b>.</li>
+        <li>Elige el <b>deporte</b>. Después no se puede cambiar.</li>
+        <li>Deja el estado en <b>Borrador</b> mientras lo preparas: así el público todavía no lo ve.</li>
+        <li>Revisa los <b>puntos del medallero</b> (9 por oro, 3 por plata y 1 por bronce, si no los cambias).</li>
+        <li>Pulsa <span class="btn primary">Crear torneo</span> <span class="num-mark">2</span>.</li>
+      </ol>
+      <figure>
+        <img src="img/adm-torneos.png" alt="Lista de torneos">
+        <figcaption><b>Torneos.</b> <span class="num-mark">1</span> Nuevo torneo. Pulsa un torneo para gestionarlo.</figcaption>
+      </figure>
+    </div>
+    <figure>
+      <img src="img/adm-torneo-nuevo.png" alt="Formulario de nuevo torneo" style="max-height:120mm">
+      <figcaption><b>Nuevo torneo</b> con datos de ejemplo.</figcaption>
+    </figure>
+  </div>
+
+  <h4>Pesos y edades del torneo</h4>
+  <p>Antes de crear categorías, entra en el torneo y abre la pestaña <b>Configuración</b>:</p>
+  <ul>
+    <li><b>Divisiones de peso:</b> nombre (Pluma, Ligero…), kilos mínimo y máximo, y género. Deja el mínimo vacío para «hasta X kg» y el máximo vacío para «más de X kg» o un absoluto.</li>
+    <li><b>Grupos de edad:</b> nombre (Juvenil, Adulto, Master…) y edades desde / hasta. La edad se calcula con el año del torneo menos el año de nacimiento.</li>
+  </ul>
+  <p>Cuando el torneo esté listo para el público, cambia su <b>Estado</b> aquí mismo a <b>Inscripción</b>, <b>Pesaje</b> o <b>En curso</b>, y pulsa <span class="btn primary">Guardar cambios</span>.</p>
+  <figure style="width:130mm">
+    <img src="img/adm-configuracion.png" alt="Configuración del torneo">
+    <figcaption><b>Configuración.</b> Datos del torneo a la izquierda y divisiones de peso a la derecha (los grupos de edad están debajo).</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h3 id="s3-3"><span class="n">3.3</span>Crear categorías</h3>
+  <p>Una categoría es el grupo en el que compiten los atletas: <b>edad × género × cinturón × peso</b>, por ejemplo «Adulto · Masculino · Azul · Pluma». Hay dos formas de crearlas, en la pestaña <b>Categorías</b>:</p>
+  <figure style="width:135mm">
+    <img src="img/adm-categorias.png" alt="Lista de categorías">
+    <figcaption><b>Categorías.</b> <span class="num-mark">1</span> Generación asistida (muchas de una vez). <span class="num-mark">2</span> Nueva (una a una). A la derecha de cada fila: ver llave, editar y eliminar.</figcaption>
+  </figure>
+  <div class="split">
+    <div>
+      <h4>Muchas de una vez (recomendado)</h4>
+      <ol class="steps">
+        <li>Pulsa <span class="btn">Generación asistida</span> <span class="num-mark">1</span>.</li>
+        <li>Toca los grupos de edad, géneros, cinturones y pesos que quieras. Los marcados se ven en rojo.</li>
+        <li>Elige el <b>formato por defecto</b> de la llave (ver 3.6).</li>
+        <li>Pulsa <span class="btn primary">Crear combinaciones</span>. Se crea una categoría por cada combinación.</li>
+      </ol>
+      <div class="note"><p>Cuando cierren las inscripciones, pulsa <b>Limpiar vacías</b> (aparece sobre la lista) para quitar las categorías sin atletas.</p></div>
+      <h4>Una a una</h4>
+      <p>Pulsa <span class="btn primary">Nueva</span> <span class="num-mark">2</span>, elige edad, género, cinturón, peso, formato y tatami, y guarda. El nombre se escribe solo.</p>
+    </div>
+    <figure>
+      <img src="img/adm-categorias-asistida.png" alt="Generación asistida de categorías">
+      <figcaption><b>Generación asistida.</b> Cada combinación marcada será una categoría.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <h3 id="s3-4"><span class="n">3.4</span>Registrar academias y atletas</h3>
+  <p>Academias y atletas se guardan <b>una sola vez</b> y sirven para todos tus torneos.</p>
+  <h4>Academias</h4>
+  <p>En <b>Academias</b> pulsa <span class="btn primary">Nueva academia</span> y escribe su nombre, una <b>abreviatura</b> corta (aparece en la llave junto al atleta), la ciudad y un color. Si importas atletas desde Excel, las academias que no existan se crean solas.</p>
+  <h4>Atletas uno a uno</h4>
+  <p>En <b>Atletas</b> pulsa <span class="btn primary">Nuevo atleta</span> <span class="num-mark">1</span> y rellena nombre, apellidos, documento, fecha de nacimiento, género, cinturón y academia. El <b>documento</b> no se puede repetir: así se evita registrar dos veces a la misma persona.</p>
+  <figure style="width:135mm">
+    <img src="img/adm-atletas.png" alt="Lista de atletas">
+    <figcaption><b>Atletas.</b> <span class="num-mark">1</span> Nuevo atleta. <span class="num-mark">2</span> Importar desde Excel. El botón Plantilla descarga un Excel de ejemplo.</figcaption>
+  </figure>
+  <h4>Importar desde Excel</h4>
+  <div class="split wide-left">
+    <div>
+      <ol class="steps">
+        <li>Pulsa <span class="btn">Plantilla</span> para descargar un Excel con las columnas correctas, y rellénalo (una fila por atleta).</li>
+        <li>Pulsa <span class="btn">Importar</span> <span class="num-mark">2</span> y elige tu archivo (.xlsx, .xls o .csv).</li>
+        <li>Revisa la <b>vista previa</b>: cuántas filas hay y qué columnas se reconocieron.</li>
+        <li>Elige el <b>deporte</b> (para entender los cinturones) y, si quieres, el <b>torneo</b> en el que inscribirlos directamente.</li>
+        <li>Pulsa <span class="btn primary">Importar N filas</span> <span class="num-mark">1</span>.</li>
+      </ol>
+      <div class="note"><p>Escribe las fechas como <b>AAAA-MM-DD</b> (1998-04-12) y el género como M o F. Si un documento ya existe, ese atleta se actualiza en lugar de duplicarse.</p></div>
+    </div>
+    <figure>
+      <img src="img/adm-atletas-importar.png" alt="Vista previa de importación">
+      <figcaption><b>Vista previa de la importación.</b> Nada se guarda hasta que pulsas Importar.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <h3 id="s3-5"><span class="n">3.5</span>Inscribir atletas y hacer el pesaje</h3>
+  <h4>Inscribir</h4>
+  <div class="split">
+    <div>
+      <ol class="steps">
+        <li>Dentro del torneo, abre la pestaña <b>Inscripciones</b> y pulsa <span class="btn primary">Inscribir</span>.</li>
+        <li>Busca al atleta por nombre o documento y tócalo.</li>
+        <li>Escribe su <b>peso declarado</b>.</li>
+        <li>Deja la categoría en <b>Automática</b>: el sistema elige la que encaja por edad, género, cinturón y peso. También puedes elegirla tú.</li>
+        <li>Pulsa <span class="btn primary">Inscribir</span> <span class="num-mark">1</span>.</li>
+      </ol>
+    </div>
+    <figure>
+      <img src="img/adm-inscribir.png" alt="Inscribir atleta">
+      <figcaption><b>Inscribir atleta</b> con categoría automática.</figcaption>
+    </figure>
+  </div>
+  <div class="note warn"><p>Si un atleta queda <b>Sin categoría</b> (porque encajan varias o ninguna), pulsa el lápiz de su fila y elige una. El botón <b>Asignar automáticamente</b> intenta resolver todos a la vez.</p></div>
+
+  <h4>Pesaje</h4>
+  <ol class="steps">
+    <li>Abre la pestaña <b>Pesaje</b> y pulsa el filtro <span class="btn">Sin pesar</span> <span class="num-mark">1</span> para ver solo a quien falta.</li>
+    <li>Pulsa <span class="btn">Pesar</span> <span class="num-mark">2</span> en la fila del atleta.</li>
+    <li>Escribe el <b>peso real</b> y pulsa <span class="btn" style="background:#2e6e4a;color:#fff;border-color:#2e6e4a">Registrar</span> <span class="num-mark">3</span>.</li>
+    <li>Si da el peso, queda <b>Apto</b>. Si no, verás un aviso de <b>Sobrepeso</b> o <b>Bajo peso</b> con botones para pasarlo a una categoría que encaje, o para marcarlo como no apto.</li>
+  </ol>
+  <figure style="width:135mm">
+    <img src="img/adm-pesaje.png" alt="Lista de pesaje">
+    <figcaption><b>Pesaje.</b> <span class="num-mark">1</span> Filtro «Sin pesar». <span class="num-mark">2</span> Pesar al atleta. Arriba, cuántos hay en cada estado.</figcaption>
+  </figure>
+  <figure style="width:135mm">
+    <img src="img/adm-pesaje-formulario.png" alt="Registrar el peso">
+    <figcaption><b>Registrar el peso real.</b> <span class="num-mark">3</span> Registrar.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h3 id="s3-6"><span class="n">3.6</span>Generar llaves</h3>
+  <p>La llave es el cuadro de combates de una categoría. Cada categoría tiene uno de estos <b>formatos</b>:</p>
   <table>
-    <tr><th style="width:22%">Perfil</th><th>Qué puede hacer</th><th style="width:22%">Dónde entra</th></tr>
-    <tr><td><strong>Público</strong><br><span class="small">sin cuenta</span></td><td>Ver torneos publicados, categorías, llaves, tatamis en vivo, medallero y descargar los PDF. No puede modificar nada.</td><td>Página de inicio</td></tr>
-    <tr><td><strong>Administración</strong><br><span class="small">rol ADMIN</span></td><td>Control total: deportes, academias, usuarios, atletas, torneos, categorías, inscripciones, pesaje, llaves, tatamis, resultados, auditoría y exportaciones.</td><td><em>Entrar</em> → Panel</td></tr>
-    <tr><td><strong>Mesa de control</strong><br><span class="small">rol TABLE</span></td><td>Solo registra y corrige resultados de los combates en los tatamis que tiene asignados. No ve datos personales de los atletas.</td><td><em>Entrar</em> → Mesa</td></tr>
+    <tr><th style="width:30%">Formato</th><th>Cómo funciona</th></tr>
+    <tr><td><b>Eliminación simple</b></td><td>Quien pierde queda fuera; los dos que pierden en semifinales se llevan el bronce.</td></tr>
+    <tr><td><b>Eliminación simple con bronce</b></td><td>Igual, pero los que pierden en semifinales luchan un combate por el tercer puesto (un solo bronce).</td></tr>
+    <tr><td><b>Doble eliminación</b></td><td>Hay que perder dos veces para quedar fuera: quien pierde pasa a la repesca y puede volver a la gran final.</td></tr>
+    <tr><td><b>Todos contra todos</b></td><td>Cada atleta lucha contra todos los demás y gana quien suma más victorias; ideal para grupos pequeños.</td></tr>
   </table>
-
-  <h3>1.2 Cómo entrar</h3>
-  <p>Abre la dirección que te haya dado la organización en cualquier navegador moderno (Chrome, Safari, Firefox o Edge) en ordenador, tablet o teléfono. No hay que instalar nada.</p>
-  <ul>
-    <li>En una instalación local de desarrollo la aplicación está en <code>http://localhost:5173</code>; con Docker en <code>http://localhost:8080</code>.</li>
-    <li>Para administrar o ser mesa, pulsa <strong>Entrar</strong> (arriba a la derecha, o abajo en el móvil) e introduce tu correo y contraseña. Ver el capítulo 4.</li>
-  </ul>
-  <div class="note"><p><strong>Usuarios de demostración</strong> (solo en la instalación de pruebas): administración <code>admin@zenkai.dojo</code> / <code>admin123</code>; mesa del Tatami 1 <code>mesa@zenkai.dojo</code> / <code>mesa123</code>; mesa de los Tatamis 2 y 3 <code>mesa2@zenkai.dojo</code> / <code>mesa123</code>. Cámbialos antes de usar la aplicación en un torneo real.</p></div>
-
-  <h3>1.3 Tema claro y oscuro</h3>
-  <p>El botón con el icono de pantalla (en la cabecera o en la barra lateral) alterna entre <strong>automático</strong> (sigue el ajuste del sistema), <strong>claro</strong> y <strong>oscuro</strong>. La elección se recuerda en ese navegador.</p>
-  <figure><img src="img/pub-inicio-oscuro.png" alt="Página de inicio en tema oscuro"><figcaption>La página de inicio con el tema oscuro activado.</figcaption></figure>
-
-  <h3>1.4 Uso en el móvil</h3>
-  <p>Toda la aplicación se adapta al teléfono. La navegación principal pasa a una <strong>barra inferior</strong>; en administración, el menú completo se abre con el botón <strong>☰</strong> de la esquina superior derecha. Las pestañas de un torneo se desplazan de lado a lado (el borde derecho se desvanece para indicar que hay más).</p>
-  <figure class="phones"><img src="img/mov-inicio.png" alt="Inicio en el móvil"><img src="img/mov-adm-menu.png" alt="Menú de administración en el móvil"></figure>
-  <figcaption>Izquierda: inicio público con la barra inferior. Derecha: menú de administración desplegado.</figcaption>
+  <ol class="steps">
+    <li>Abre la pestaña <b>Llaves</b> y elige la categoría en el desplegable.</li>
+    <li>Deja marcado <b>Evitar misma academia</b> para que dos compañeros no se crucen en la primera ronda.</li>
+    <li>Pulsa <span class="btn primary">Generar por sorteo</span> <span class="num-mark">1</span> para un orden al azar, o <span class="btn">Con siembra</span> <span class="num-mark">2</span> para separar a los favoritos según el número de siembra puesto en Inscripciones.</li>
+  </ol>
+  <figure style="width:135mm">
+    <img src="img/adm-llaves-generar.png" alt="Generar la llave">
+    <figcaption><b>Categoría sin llave.</b> <span class="num-mark">1</span> Generar por sorteo. <span class="num-mark">2</span> Con siembra. El aviso naranja indica atletas sin pesar.</figcaption>
+  </figure>
+  <p>Si sobran huecos, algunos atletas pasan de ronda sin combatir (<b>BYE</b>). Mientras no haya empezado ningún combate puedes <b>Regenerar</b> o <b>Eliminar</b> la llave.</p>
+  <figure style="width:135mm">
+    <img src="img/adm-llaves.png" alt="Llave generada">
+    <figcaption><b>Llave generada.</b> Rojo arriba, azul abajo; el ganador lleva un trofeo y el perdedor sale tachado. El combate con borde verde se está disputando ahora.</figcaption>
+  </figure>
 </section>
 
-<!-- ============================ 2. CONCEPTOS ============================ -->
-<section class="chapter">
-  <h2>2. Conceptos básicos</h2>
-  <p>Estos son los términos que verás por toda la aplicación. Conocerlos evita la mayoría de las dudas.</p>
+<section>
+  <h3 id="s3-7"><span class="n">3.7</span>Tatamis, horarios y usuarios de mesa</h3>
+  <h4>Crear los usuarios de mesa</h4>
+  <div class="split wide-left">
+    <div>
+      <ol class="steps">
+        <li>En el menú, entra en <b>Usuarios</b> y pulsa <span class="btn primary">Nuevo usuario</span>.</li>
+        <li>Escribe el nombre, el correo y una contraseña (mínimo 6 caracteres).</li>
+        <li>En <b>Rol</b> elige <b>Mesa de control</b>.</li>
+        <li>Elige el torneo y marca los tatamis que podrá manejar. Pulsa <span class="btn primary">Guardar</span>.</li>
+      </ol>
+      <p>Entrega a cada mesa su correo y contraseña. La casilla <b>Usuario activo</b> (al editar) bloquea una cuenta sin borrarla.</p>
+    </div>
+    <figure>
+      <img src="img/adm-usuario-nuevo.png" alt="Nuevo usuario de mesa" style="max-height:95mm">
+      <figcaption><b>Nuevo usuario de mesa</b> con el Tatami 3 asignado.</figcaption>
+    </figure>
+  </div>
+  <h4>Tatamis y horarios</h4>
+  <ol class="steps">
+    <li>En el torneo, abre la pestaña <b>Tatamis</b>. Escribe el nombre del tatami y pulsa <span class="btn">Añadir</span> <span class="num-mark">1</span>.</li>
+    <li>Pulsa <span class="btn">Asignar mesa</span> <span class="num-mark">2</span> y marca qué usuarios de mesa manejan ese tatami.</li>
+    <li>En <b>Programación</b>, elige para cada categoría su tatami y su hora. Ordénalas con las flechas ↑ ↓.</li>
+    <li>Pulsa <span class="btn primary">Guardar programación</span> <span class="num-mark">3</span>. Cada tatami recibe su cola de combates numerada (#1, #2…).</li>
+  </ol>
+  <div class="split wide-left">
+    <figure>
+      <img src="img/adm-tatamis.png" alt="Tatamis y programación">
+      <figcaption><b>Tatamis.</b> <span class="num-mark">1</span> Añadir. <span class="num-mark">2</span> Asignar mesa. <span class="num-mark">3</span> Guardar programación (se activa al hacer un cambio).</figcaption>
+    </figure>
+    <figure>
+      <img src="img/adm-asignar-mesa.png" alt="Asignar mesa" style="max-height:45mm">
+      <figcaption><b>Asignar mesa</b> al Tatami 1.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <h3 id="s3-8"><span class="n">3.8</span>Corregir un resultado</h3>
+  <p>Normalmente la mesa anota y corrige sus propios resultados (capítulo 4). Como administrador también puedes corregir cualquier combate:</p>
+  <ol class="steps">
+    <li>Abre la pestaña <b>Llaves</b> y elige la categoría.</li>
+    <li>Toca el combate que quieres corregir <span class="num-mark">1</span>.</li>
+    <li>Elige el <b>ganador correcto</b>, escribe el <b>motivo</b> de la corrección y toca el <b>método de victoria</b>. Se guarda al momento.</li>
+  </ol>
+  <figure style="width:135mm">
+    <img src="img/adm-corregir-llave.png" alt="Elegir el combate en la llave">
+    <figcaption><b>Llave de una categoría terminada.</b> <span class="num-mark">1</span> Toca el combate para corregirlo.</figcaption>
+  </figure>
+  <div class="split">
+    <figure>
+      <img src="img/adm-corregir-modal.png" alt="Corregir resultado">
+      <figcaption><b>Corregir resultado.</b> Ganador, motivo y método.</figcaption>
+    </figure>
+    <div>
+      <div class="note warn"><span class="t">Qué pasa al corregir</span><p>La llave se recalcula: si el ganador cambia, los combates siguientes en los que participaba vuelven a <b>pendiente</b> para disputarse de nuevo.</p></div>
+      <p>Todas las correcciones quedan guardadas (quién, cuándo, qué cambió y por qué) en la pestaña <b>Auditoría</b>.</p>
+      <p>Para borrar un resultado sin poner otro, usa <b>Anular un resultado</b>, debajo de la llave.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3 id="s3-9"><span class="n">3.9</span>Medallero y exportar a PDF y Excel</h3>
+  <h4>Medallero</h4>
+  <p>El medallero se calcula solo a medida que terminan las categorías. Ordena a las academias por <b>puntos</b> (9 por oro, 3 por plata y 1 por bronce, o lo que configuraste) y, debajo, muestra el podio de cada categoría. Para verlo, en el Resumen del torneo pulsa <span class="btn">Ver como público</span> y abre la pestaña <b>Medallero</b>.</p>
+  <figure style="width:135mm">
+    <img src="img/adm-medallero.png" alt="Medallero">
+    <figcaption><b>Medallero</b> por academias. Arriba a la derecha: Resultados PDF y Modo TV.</figcaption>
+  </figure>
+  <h4>Exportar</h4>
+  <p>En la pestaña <b>Exportar</b> pulsa <span class="btn">Descargar</span> en el documento que necesites:</p>
   <table>
-    <tr><th style="width:24%">Término</th><th>Significado</th></tr>
-    <tr><td><strong>Deporte</strong></td><td>Define los <em>métodos de victoria</em> (sumisión, puntos, ventajas…, con los puntos que valen en los desempates), la duración por defecto del combate y la lista de <em>cinturones o niveles</em> con su color. Jiu-Jitsu Brasileño viene precargado.</td></tr>
-    <tr><td><strong>Torneo</strong></td><td>El evento: nombre, sede, fechas, deporte, estado y puntos del medallero (por defecto 9 / 3 / 1 para oro, plata y bronce).</td></tr>
-    <tr><td><strong>División de peso</strong></td><td>Rango de kilos (inclusivo) opcionalmente limitado a un género. Si no tiene mínimo ni máximo es <em>Absoluto</em>.</td></tr>
-    <tr><td><strong>Grupo de edad</strong></td><td>Rango de edades. La edad competitiva se calcula como <em>año del torneo − año de nacimiento</em> (convención IBJJF).</td></tr>
-    <tr><td><strong>Categoría</strong></td><td>La combinación en la que se compite: grupo de edad × género × cinturón × división de peso, con un <em>formato de llave</em>. El nombre se genera solo («Adulto · Masculino · Azul · Pluma») salvo que escribas otro.</td></tr>
-    <tr><td><strong>Academia</strong></td><td>Equipo o club del atleta. Es la base del medallero por academias y se usa para evitar que compañeros se crucen en la primera ronda.</td></tr>
-    <tr><td><strong>Atleta</strong></td><td>Persona registrada en el sistema (documento único, nacimiento, género, cinturón, academia). Un atleta existe una sola vez aunque participe en muchos torneos.</td></tr>
-    <tr><td><strong>Inscripción</strong></td><td>Un atleta apuntado a un torneo, con su categoría, peso declarado, resultado del pesaje y, si procede, número de siembra.</td></tr>
-    <tr><td><strong>Pesaje</strong></td><td>Registro del peso real. Puede ser <span class="badge">Apto</span>, <span class="badge">Sobrepeso</span>, <span class="badge">Bajo peso</span>, <span class="badge">Sin pesar</span> o <span class="badge">Descalificado</span>. Si no da el peso, el sistema propone categorías compatibles.</td></tr>
-    <tr><td><strong>Llave</strong></td><td>El cuadro de combates de una categoría. Formatos: <em>eliminación simple</em> (dos bronces: los perdedores de semifinal), <em>eliminación simple + bronce</em> (combate por el tercer puesto), <em>eliminación doble</em> (llave principal + repechaje + gran final) y <em>todos contra todos</em> (round robin con tabla de clasificación).</td></tr>
-    <tr><td><strong>BYE</strong></td><td>Hueco libre cuando el número de atletas no es potencia de dos: el atleta pasa de ronda sin combatir. Se reparte a los mejores sembrados.</td></tr>
-    <tr><td><strong>Siembra</strong></td><td>Número que ordena a los favoritos (1 = mejor) para separarlos en la llave. Es opcional.</td></tr>
-    <tr><td><strong>Tatami</strong></td><td>Área de combate. Cada categoría se programa en un tatami con una hora; cada tatami tiene su cola de combates numerada (#1, #2…).</td></tr>
-    <tr><td><strong>Mesa de control</strong></td><td>Usuario que opera un tatami: inicia combates y registra ganadores. Puede corregir un resultado indicando el motivo.</td></tr>
-    <tr><td><strong>Esquinas</strong></td><td><span class="corner" style="background:#b22a30"></span><strong>Rojo</strong> y <span class="corner" style="background:#2a4d8f"></span><strong>Azul</strong> identifican a cada competidor en un combate, igual que en el tatami.</td></tr>
-    <tr><td><strong>Auditoría</strong></td><td>Historial de todos los resultados registrados o corregidos: quién, cuándo, qué había antes y después, y el motivo.</td></tr>
+    <tr><th style="width:32%">Documento</th><th>Qué contiene</th></tr>
+    <tr><td><b>Participantes por categoría</b> (PDF)</td><td>Inscritos con academia, cinturón y pesaje.</td></tr>
+    <tr><td><b>Horarios por tatami</b> (PDF)</td><td>Qué categoría va en cada tatami y a qué hora.</td></tr>
+    <tr><td><b>Resultados y medallero</b> (PDF)</td><td>Medallero por academias y podios.</td></tr>
+    <tr><td><b>Llave de una categoría</b> (PDF)</td><td>La llave dibujada, lista para imprimir y colgar.</td></tr>
+    <tr><td><b>Libro Excel completo</b></td><td>Participantes, categorías, resultados, medallero y podios. Incluye datos de contacto: solo lo descargan los administradores.</td></tr>
   </table>
-
-  <h3>2.1 El flujo de un torneo</h3>
-  <ol class="steps">
-    <li><strong>Preparar</strong> (una vez): deporte, academias y usuarios de mesa. Capítulo 5.</li>
-    <li><strong>Crear el torneo</strong> y configurar divisiones de peso y grupos de edad. Sección 6.1 y 6.3.</li>
-    <li><strong>Crear las categorías</strong>, a mano o con la generación asistida. Sección 6.4.</li>
-    <li><strong>Dar de alta e inscribir atletas</strong> (uno a uno o importando Excel). Secciones 5.5 y 6.5.</li>
-    <li><strong>Pesar</strong> el día del evento y recolocar a quien no dé el peso. Sección 6.6.</li>
-    <li><strong>Generar las llaves</strong> de cada categoría. Sección 6.7.</li>
-    <li><strong>Crear tatamis</strong>, programar las categorías y asignar mesas. Sección 6.8.</li>
-    <li><strong>La mesa registra los resultados</strong>; el público y el modo TV se actualizan solos. Capítulos 7 y 8.</li>
-    <li><strong>Exportar</strong> llaves, horarios, resultados y el Excel completo. Sección 6.10.</li>
-  </ol>
-  <div class="note ok"><p>La pestaña <strong>Resumen</strong> de cada torneo muestra estos mismos pasos con una marca verde en los que ya están hechos y un botón «Siguiente paso» que te lleva directamente a lo que toca.</p></div>
+  <figure style="width:130mm">
+    <img src="img/adm-exportar.png" alt="Exportar">
+    <figcaption><b>Exportar.</b> Cada tarjeta descarga un documento.</figcaption>
+  </figure>
 </section>
 
-<!-- ============================ 3. VISTA PÚBLICA ============================ -->
+<!-- ============================ 4. MESA ============================ -->
 <section class="chapter">
-  <h2>3. Vista pública (sin cuenta)</h2>
-  <p>Cualquier persona con el enlace puede seguir el torneo. Las páginas públicas se actualizan solas: las llaves y los tatamis cada 5 segundos, el medallero y las categorías cada 15. No hace falta recargar.</p>
+  <h2 id="c4"><span class="n">4</span>Guía de la mesa de control</h2>
+  <p class="lead">Para la persona que anota junto al tatami. Pensada para una tablet: botones grandes y uno o dos toques por resultado.</p>
 
-  <h3>3.1 Inicio</h3>
-  <p>Muestra los torneos <strong>en curso</strong> («Ahora en el tatami»), con acceso directo a su ficha y al modo TV, y debajo el resto de torneos publicados. Los torneos en estado <em>Borrador</em> no aparecen para el público.</p>
-  <figure><img src="img/pub-inicio.png" alt="Página de inicio"><figcaption>Inicio público. El botón «Acceso organización» lleva al inicio de sesión.</figcaption></figure>
-
-  <h3>3.2 Torneos</h3>
-  <p>Lista completa de torneos visibles, con su estado, fechas y deporte.</p>
-  <figure><img src="img/pub-torneos.png" alt="Lista de torneos"></figure>
-
-  <h3>3.3 Ficha del torneo</h3>
-  <p>Tiene tres pestañas:</p>
-  <ul>
-    <li><strong>Categorías:</strong> tarjetas con cinturón, género, peso, formato, número de atletas, tatami y hora. Puedes buscar por nombre y filtrar por cinturón. Pulsa una para abrir su llave.</li>
-    <li><strong>Tatamis:</strong> un panel por tatami con el combate en curso (resaltado en verde) y los siguientes en cola.</li>
-    <li><strong>Medallero:</strong> tabla de academias ordenada por puntos y, debajo, los podios de las categorías finalizadas.</li>
-  </ul>
-  <p>Arriba a la derecha están <strong>Resultados PDF</strong> (medallero y podios) y <strong>Modo TV</strong>.</p>
-  <figure><img src="img/pub-torneo-categorias.png" alt="Ficha del torneo, pestaña Categorías"><figcaption>Pestaña Categorías con buscador y filtro por cinturón.</figcaption></figure>
-  <figure><img src="img/pub-torneo-tatamis.png" alt="Pestaña Tatamis"><figcaption>Pestaña Tatamis: combate en curso y cola de cada área.</figcaption></figure>
-  <figure><img src="img/pub-torneo-medallero.png" alt="Pestaña Medallero"><figcaption>Pestaña Medallero: puntos por academia y podios.</figcaption></figure>
-
-  <h3>3.4 Categoría y llave</h3>
-  <p>La página de una categoría muestra, de arriba abajo: la cabecera (estado, cinturón, género, peso, formato y tatami), el botón <strong>Llave PDF</strong>, el <strong>podio</strong> cuando la categoría ha terminado, la <strong>llave</strong> y la lista de atletas inscritos.</p>
-  <p>Cómo leer la llave:</p>
-  <ul>
-    <li>Cada caja es un combate. La franja de color indica la esquina: <span class="corner" style="background:#b22a30"></span>rojo arriba, <span class="corner" style="background:#2a4d8f"></span>azul abajo. Junto al nombre aparece la abreviatura de la academia y el cinturón.</li>
-    <li>El <strong>ganador</strong> aparece en negrita con el trofeo 🏆 y el perdedor tachado. Debajo de la caja se indica el método de victoria (Puntos, Sumisión…).</li>
-    <li>Una caja con borde discontinuo y «BYE» es un pase automático. «Por definir» significa que todavía no se conoce el rival.</li>
-    <li>Un combate <strong>en curso</strong> tiene borde verde y la etiqueta «En curso». La etiqueta «#7» es su número en la cola del tatami.</li>
-    <li>Las líneas doradas conectan los combates ya resueltos con el siguiente.</li>
-  </ul>
-  <p>Dos vistas con los botones de la derecha: <strong>Gráfico</strong> (la llave dibujada) y <strong>Lista</strong> (los mismos combates como una lista por rondas, útil para leer rápido). En el ordenador la llave se ajusta sola al ancho; puedes <strong>arrastrar</strong> para moverla, hacer zoom con <kbd>Ctrl</kbd> + rueda (o pellizco en el trackpad) y con los botones + / −, y volver a encajarla con <strong>Ajustar a pantalla</strong> o doble clic.</p>
-  <figure><img src="img/pub-categoria.png" alt="Página de categoría con podio y llave"><figcaption>Categoría finalizada: podio y llave completa.</figcaption></figure>
-  <figure><img src="img/pub-categoria-lista.png" alt="Vista lista de la llave"><figcaption>La misma llave en vista Lista.</figcaption></figure>
-  <p>En las categorías <strong>todos contra todos</strong> no hay llave sino una <strong>tabla de clasificación</strong> (victorias, derrotas, puntos por método y criterios de desempate) seguida de la lista de combates.</p>
-  <figure><img src="img/pub-categoria-rr.png" alt="Categoría todos contra todos"><figcaption>Categoría en formato todos contra todos.</figcaption></figure>
-
-  <h3>3.5 La llave en el teléfono</h3>
-  <p>En el móvil la llave se ve <strong>igual que en el ordenador</strong>, a un tamaño legible, con tres vistas:</p>
-  <ul>
-    <li><strong>Gráfico:</strong> la llave dibujada. <strong>Desliza con un dedo hacia los lados</strong> para avanzar de ronda en ronda; la página sigue haciendo scroll vertical con normalidad. <strong>Pellizca</strong> para ampliar o reducir y toca dos veces para volver al tamaño normal. El botón <strong>Ver completa</strong> encaja toda la llave en la pantalla (para tener una visión general) y <strong>Tamaño normal</strong> la devuelve al tamaño legible.</li>
-    <li><strong>Vertical:</strong> las rondas de arriba abajo, con los combates emparejados y un texto que indica a qué combate pasan los ganadores. Solo scroll vertical.</li>
-    <li><strong>Lista:</strong> los combates como lista.</li>
-  </ul>
-  <figure class="phones"><img src="img/mov-llave-grafico.png" alt="Llave gráfica en el móvil"><img src="img/mov-llave-vertical.png" alt="Llave vertical en el móvil"><img src="img/mov-llave-lista.png" alt="Llave en lista en el móvil"></figure>
-  <figcaption>Las tres vistas de la llave en un teléfono: Gráfico, Vertical y Lista.</figcaption>
-
-  <h3>3.6 Modo TV</h3>
-  <p>Pensado para proyectar en una pantalla grande del pabellón. Ver el capítulo 8.</p>
+  <div class="split">
+    <div>
+      <h3>Elegir tu tatami</h3>
+      <p>Al entrar con tu cuenta de mesa verás <b>solo los tatamis que tienes asignados</b>. Toca el tuyo. Si no aparece, pide al administrador que te lo asigne (sección 3.7).</p>
+      <figure>
+        <img src="img/mesa-tatamis.png" alt="Elegir tatami">
+        <figcaption><b>Elegir tatami.</b> La mesa solo ve los suyos.</figcaption>
+      </figure>
+      <h3>Iniciar un combate</h3>
+      <ol class="steps">
+        <li>En <b>Siguientes combates</b> está la cola del tatami, en orden (#6, #7…).</li>
+        <li>Cuando los atletas suban al tatami, pulsa <span class="btn" style="background:#2e6e4a;color:#fff;border-color:#2e6e4a">Iniciar</span> <span class="num-mark">1</span>.</li>
+        <li>El combate pasa a <b>Combate en curso</b> y el público lo ve «En curso» al momento.</li>
+      </ol>
+      <p class="small" style="font-size:9.3pt;color:var(--muted)">¿Lo iniciaste por error? Pulsa <b>No iniciado</b> y vuelve a la cola. El botón ✓ registra un resultado sin iniciar el combate.</p>
+    </div>
+    <figure>
+      <img src="img/mesa-iniciar.png" alt="Cola de combates con botón Iniciar">
+      <figcaption><b>Tatami sin combate en curso.</b> <span class="num-mark">1</span> Iniciar el siguiente.</figcaption>
+    </figure>
+  </div>
 </section>
 
-<!-- ============================ 4. LOGIN ============================ -->
-<section class="chapter">
-  <h2>4. Iniciar sesión</h2>
+<section>
+  <h3>Registrar el ganador y el método</h3>
+  <div class="split">
+    <figure>
+      <img src="img/mesa-consola.png" alt="Combate en curso">
+      <figcaption><b>Combate en curso.</b> <span class="num-mark">1</span> Registrar ganador al terminar.</figcaption>
+    </figure>
+    <div>
+      <ol class="steps">
+        <li>Cuando termine el combate, pulsa <span class="btn primary">Registrar ganador</span> <span class="num-mark">1</span>.</li>
+        <li>Toca la tarjeta del atleta que ganó: <b>Rojo</b> o <b>Azul</b>.</li>
+        <li>Toca el <b>método de victoria</b> (Sumisión, Puntos, Ventajas…). <b>Se guarda al instante</b>, no hay que pulsar nada más.</li>
+        <li>El ganador avanza solo en la llave y el siguiente combate queda listo para iniciar.</li>
+      </ol>
+      <div class="note ok"><p>Fíjate bien en el color de la esquina: la franja <b style="color:#b22a30">roja</b> o <b style="color:#2a4d8f">azul</b> de cada tarjeta es la misma que en el tatami.</p></div>
+    </div>
+  </div>
+  <div class="row">
+    <figure>
+      <img src="img/mesa-ganador.png" alt="Elegir ganador">
+      <figcaption><b>Paso 1.</b> <span class="num-mark">1</span> Toca al ganador.</figcaption>
+    </figure>
+    <figure>
+      <img src="img/mesa-metodo.png" alt="Elegir método">
+      <figcaption><b>Paso 2.</b> <span class="num-mark">2</span> Toca el método y se guarda.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <h3>Corregir un resultado</h3>
+  <p>¿Anotaste mal un ganador o un método? Se arregla en segundos:</p>
   <ol class="steps">
-    <li>Pulsa <strong>Entrar</strong> (o «Acceso organización» en el inicio).</li>
-    <li>Escribe tu <strong>correo electrónico</strong> y tu <strong>contraseña</strong> y pulsa <strong>Entrar</strong>.</li>
-    <li>Según tu rol, la aplicación te lleva al <strong>Panel de administración</strong> o a la <strong>Mesa de control</strong>.</li>
+    <li>Pulsa <span class="btn">Finalizados</span>, arriba a la derecha.</li>
+    <li>Baja hasta <b>Finalizados (toca para corregir)</b> y toca el combate <span class="num-mark">1</span>.</li>
+    <li>Elige el ganador correcto y escribe el <b>motivo</b> (por ejemplo: «error al registrar la esquina»). Es obligatorio.</li>
+    <li>Toca el método de victoria. La corrección se guarda y la llave se actualiza.</li>
   </ol>
-  <figure><img src="img/login.png" alt="Pantalla de inicio de sesión"><figcaption>Inicio de sesión. En la instalación de pruebas se muestran las credenciales de demostración.</figcaption></figure>
+  <div class="split">
+    <figure>
+      <img src="img/mesa-finalizados.png" alt="Combates finalizados">
+      <figcaption><b>Combates finalizados.</b> <span class="num-mark">1</span> Toca el que quieras corregir.</figcaption>
+    </figure>
+    <figure>
+      <img src="img/mesa-corregir.png" alt="Corregir resultado con motivo">
+      <figcaption><b>Corregir resultado.</b> <span class="num-mark">1</span> Motivo de la corrección.</figcaption>
+    </figure>
+  </div>
+  <div class="note warn"><p>Si el ganador cambia, los combates siguientes en los que participaba vuelven a <b>pendiente</b> y habrá que disputarlos de nuevo. Cada corrección queda registrada.</p></div>
+</section>
+
+<!-- ============================ 5. PÚBLICO ============================ -->
+<section class="chapter">
+  <h2 id="c5"><span class="n">5</span>Vista pública</h2>
+  <p class="lead">Lo que ven atletas, familias y entrenadores, sin cuenta. Todo se actualiza solo cada pocos segundos: no hace falta recargar.</p>
+
+  <h3>Ver torneos</h3>
+  <p>En el <b>Inicio</b> aparecen los torneos en curso («Ahora en el tatami») y, en <b>Torneos</b>, todos los publicados. Toca uno para abrir su ficha. Los torneos en <b>Borrador</b> no se muestran al público.</p>
+  <div class="row">
+    <figure class="phone"><img src="img/pub-torneos.png" alt="Lista de torneos"><figcaption><b>Torneos</b> publicados.</figcaption></figure>
+    <figure class="phone"><img src="img/pub-torneo.png" alt="Ficha del torneo"><figcaption><b>Ficha del torneo:</b> categorías con buscador y filtro por cinturón.</figcaption></figure>
+    <figure class="phone"><img src="img/pub-llave.png" alt="Llave en vivo"><figcaption><b>Llave en vivo.</b> El combate en curso lleva borde verde.</figcaption></figure>
+  </div>
+  <h3>Llaves en vivo</h3>
   <ul>
-    <li>Si el correo o la contraseña no son correctos verás un aviso en rojo bajo el formulario.</li>
-    <li>La sesión dura 12 horas. Si un administrador desactiva tu usuario o cambia tu rol, el cambio se aplica de inmediato.</li>
-    <li>Para salir, usa el icono de <strong>cerrar sesión</strong> al pie de la barra lateral (o «Salir» en el menú ☰ del móvil).</li>
-    <li>Desde cualquier pantalla con sesión puedes ir a la <strong>Vista pública</strong> con el botón del mismo nombre; en la cabecera pública verás entonces un acceso rápido a tu Panel o Mesa.</li>
+    <li>Toca una categoría para ver su llave. En el teléfono, <b>desliza de lado</b> para avanzar de ronda y <b>pellizca</b> para ampliar; <span class="btn">Ver completa</span> la encaja entera.</li>
+    <li>Los botones <b>Gráfico</b>, <b>Vertical</b> y <b>Lista</b> cambian la forma de verla. La lista es la más rápida de leer en pantallas pequeñas.</li>
+    <li>Cuando la categoría termina, arriba aparece el <b>podio</b>. <span class="btn">Llave PDF</span> la descarga para imprimir.</li>
   </ul>
 </section>
 
-<!-- ============================ 5. PREPARAR ============================ -->
-<section class="chapter">
-  <h2>5. Administración: preparar el sistema</h2>
-  <p>Estas secciones del menú lateral son comunes a todos los torneos. Normalmente se configuran una vez y se reutilizan.</p>
-
-  <h3>5.1 Panel de inicio</h3>
-  <p>Resumen con el número de torneos, atletas, academias y deportes, una tarjeta «Cómo funciona» con los cuatro grandes pasos y la lista de <strong>torneos activos</strong>. El botón <strong>Nuevo torneo</strong> está siempre arriba a la derecha.</p>
-  <figure><img src="img/adm-inicio.png" alt="Panel de administración"></figure>
-
-  <h3>5.2 Deportes</h3>
-  <p>Cada deporte define sus <strong>métodos de victoria</strong> (nombre, código y puntos, que se usan como desempate en todos contra todos), la <strong>duración por defecto</strong> del combate y los <strong>cinturones o niveles</strong> con su color (y una franja secundaria opcional, como la punta roja del cinturón negro).</p>
+<section>
+  <div class="keep">
+  <h3>Horarios, tatamis y medallero</h3>
+  <p>En la ficha del torneo, las pestañas de arriba muestran:</p>
   <ul>
-    <li><strong>Nuevo deporte</strong> abre el formulario. Con <strong>Añadir método</strong> y <strong>Añadir cinturón</strong> se agregan filas; el orden de los cinturones es el que se mostrará en los filtros.</li>
-    <li>Edita con el lápiz y elimina con la papelera (solo si ningún torneo lo usa).</li>
+    <li><b>Categorías:</b> cada una con su tatami y su hora prevista.</li>
+    <li><b>Tatamis:</b> qué combate se está disputando ahora en cada tatami y cuáles vienen después.</li>
+    <li><b>Medallero:</b> la clasificación por academias y los podios de cada categoría.</li>
   </ul>
-  <figure><img src="img/adm-deportes.png" alt="Deportes"></figure>
-
-  <h3>5.3 Academias</h3>
-  <p>Nombre, <strong>abreviatura</strong> (aparece en la llave junto al atleta), ciudad y color. Las academias que no existan se crean solas al importar atletas.</p>
-  <figure><img src="img/adm-academias.png" alt="Academias"></figure>
-
-  <h3>5.4 Usuarios</h3>
-  <p>Aquí se crean las cuentas de <strong>administradores</strong> y de <strong>mesas de control</strong>.</p>
-  <ol class="steps">
-    <li>Pulsa <strong>Nuevo usuario</strong>; indica nombre, correo, contraseña y rol.</li>
-    <li>Si el rol es <strong>Mesa de control</strong>, elige el torneo y marca los <strong>tatamis asignados</strong>. La mesa solo podrá operar esos tatamis (también puedes asignarlos después desde la pestaña Tatamis del torneo).</li>
-    <li>La casilla <strong>Usuario activo</strong> permite bloquear una cuenta sin borrarla.</li>
-  </ol>
-  <figure><img src="img/adm-usuario-nuevo.png" alt="Formulario de nuevo usuario"><figcaption>Alta de un usuario de mesa con sus tatamis.</figcaption></figure>
-
-  <h3>5.5 Atletas</h3>
-  <p>Base de datos de competidores, compartida por todos los torneos. Busca por nombre, documento o academia.</p>
-  <h4>Alta manual</h4>
-  <p><strong>Nuevo atleta</strong>: nombres, apellidos, <strong>documento</strong> (único: es la clave para no duplicar personas), fecha de nacimiento, género, cinturón, academia y, opcionalmente, correo y teléfono.</p>
-  <figure><img src="img/adm-atleta-nuevo.png" alt="Formulario de nuevo atleta"></figure>
-  <h4>Importar desde Excel o CSV</h4>
-  <ol class="steps">
-    <li>Descarga la <strong>Plantilla</strong> (Excel) para ver las columnas esperadas, o usa tu propio archivo: las cabeceras se reconocen con flexibilidad (<em>nombre/nombres, apellido/apellidos, documento/dni/cédula, fecha de nacimiento/nacimiento, género/sexo, cinturón/faixa, academia/equipo, peso/peso declarado, email/correo, teléfono</em>), sin distinguir mayúsculas ni acentos.</li>
-    <li>Pulsa <strong>Importar</strong> y elige el archivo (.xlsx, .xls o .csv).</li>
-    <li>Revisa la <strong>vista previa</strong>: número de filas y columnas reconocidas. Elige el <strong>deporte</strong> (para interpretar los cinturones por su nombre) y, si quieres, el <strong>torneo</strong> en el que inscribirlos directamente.</li>
-    <li>Pulsa <strong>Importar N filas</strong>. Los atletas se crean o actualizan por documento, las academias nuevas se crean y, si elegiste torneo, se inscriben y se les asigna categoría automáticamente cuando solo hay una compatible.</li>
-  </ol>
-  <figure><img src="img/adm-atletas-importar.png" alt="Vista previa de la importación"><figcaption>Vista previa antes de confirmar la importación.</figcaption></figure>
-  <div class="note"><p>Formato de fecha recomendado: <code>AAAA-MM-DD</code> (por ejemplo 1998-04-12). Género: M, F o X. Si guardas el CSV desde Excel, elige la codificación «UTF-8» para que los acentos se lean bien.</p></div>
+  </div>
+  <div class="row">
+    <figure class="phone"><img src="img/pub-tatamis.png" alt="Tatamis en vivo"><figcaption><b>Tatamis:</b> combate en curso y cola.</figcaption></figure>
+    <figure class="phone"><img src="img/pub-medallero.png" alt="Medallero"><figcaption><b>Medallero</b> por academias.</figcaption></figure>
+    <figure class="phone"><img src="img/pub-podio.png" alt="Podio de una categoría"><figcaption><b>Podio</b> de una categoría terminada.</figcaption></figure>
+  </div>
+  <div class="split" style="grid-template-columns:1fr 100mm">
+    <div>
+      <h3 style="margin-top:0">Modo TV</h3>
+      <p>Pensado para una pantalla grande o un proyector en el pabellón. En la ficha del torneo pulsa <span class="btn">Modo TV</span>: la pantalla alterna sola cada 20 segundos entre los tatamis en vivo y el medallero.</p>
+      <p>Pulsa el botón de pantalla completa (arriba a la derecha) para ocultar todo lo demás.</p>
+    </div>
+    <figure>
+      <img src="img/pub-tv.png" alt="Modo TV">
+      <figcaption><b>Modo TV.</b> Tatamis en vivo con el reloj; los puntos de abajo indican la página que se muestra.</figcaption>
+    </figure>
+  </div>
 </section>
 
-<!-- ============================ 6. TORNEO PASO A PASO ============================ -->
+<!-- ============================ 6. FAQ ============================ -->
 <section class="chapter">
-  <h2>6. Administración: el torneo paso a paso</h2>
+  <h2 id="c6"><span class="n">6</span>Preguntas frecuentes y solución de problemas</h2>
+  <p class="lead">Las dudas más habituales y cómo resolverlas.</p>
 
-  <h3>6.1 Crear el torneo</h3>
-  <p>En <strong>Torneos</strong> pulsa <strong>Nuevo torneo</strong> y rellena: nombre, deporte, sede, ciudad, fechas de inicio y fin, estado, descripción pública y los <strong>puntos del medallero</strong> (oro, plata, bronce).</p>
-  <figure><img src="img/adm-torneo-nuevo.png" alt="Formulario de nuevo torneo"></figure>
-  <p>Estados del torneo: <span class="badge">Borrador</span> (invisible para el público), <span class="badge">Inscripción</span>, <span class="badge">Pesaje</span>, <span class="badge">En curso</span> (se activa solo con el primer combate) y <span class="badge">Finalizado</span>. Puedes cambiarlo cuando quieras desde Configuración.</p>
-  <figure><img src="img/adm-torneos.png" alt="Lista de torneos en administración"><figcaption>Lista de torneos. Pulsa uno para entrar en su gestión.</figcaption></figure>
-
-  <h3>6.2 Resumen: tu guía de pasos</h3>
-  <p>Al entrar en un torneo se abre la pestaña <strong>Resumen</strong>. Arriba, una tarjeta roja indica el <strong>siguiente paso</strong> pendiente y un botón te lleva a él. Debajo, los ocho pasos del torneo: los completados llevan una marca verde; cada uno muestra un dato útil (inscritos sin categoría, atletas sin pesar, llaves generadas…) y enlaza con su pestaña. También están <strong>Ver como público</strong>, <strong>Modo TV</strong> y los tatamis en vivo.</p>
-  <figure><img src="img/adm-resumen.png" alt="Pestaña Resumen con los pasos del torneo"></figure>
-  <p>Bajo las pestañas hay siempre una <strong>línea de ayuda</strong> que explica qué se hace en esa pestaña y cuál es la siguiente.</p>
-
-  <h3>6.3 Configuración</h3>
-  <p>Tres bloques:</p>
-  <ul>
-    <li><strong>Datos del torneo:</strong> los mismos campos del alta. <strong>Guardar cambios</strong> al terminar.</li>
-    <li><strong>Divisiones de peso:</strong> nombre (Pluma, Ligero…), <em>mín. kg</em>, <em>máx. kg</em> y género. Deja ambos kilos vacíos para una división <em>absoluta</em>. Una división con género fijo solo se combina con ese género al generar categorías.</li>
-    <li><strong>Grupos de edad:</strong> nombre y edades <em>desde / hasta</em>.</li>
-  </ul>
-  <p>Al final de la página está <strong>Eliminar torneo</strong> (pide confirmación; borra también sus categorías, inscripciones y resultados).</p>
-  <figure><img src="img/adm-configuracion.png" alt="Pestaña Configuración"></figure>
-
-  <h3>6.4 Categorías</h3>
-  <p>Dos maneras de crearlas:</p>
-  <ul>
-    <li><strong>Nueva:</strong> una categoría a mano. Elige grupo de edad, género, cinturón, división de peso, <strong>formato de llave</strong>, tatami, duración del combate, criterios de desempate (para todos contra todos), si se evita la misma academia en primera ronda y, opcionalmente, un nombre propio.</li>
-    <li><strong>Generación asistida:</strong> marca los grupos de edad, géneros, cinturones y divisiones que quieras combinar y el formato por defecto; el sistema crea una categoría por cada combinación (omitiendo las que ya existan). Después puedes editar las que necesites y usar <strong>Eliminar categorías vacías</strong> para quitar las que se queden sin inscritos.</li>
-  </ul>
-  <figure><img src="img/adm-categorias-asistida.png" alt="Generación asistida de categorías"><figcaption>Generación asistida: cada combinación marcada será una categoría.</figcaption></figure>
-  <figure><img src="img/adm-categorias.png" alt="Lista de categorías"><figcaption>Tabla de categorías con estado, atletas y acciones (llave, editar, eliminar).</figcaption></figure>
-  <div class="note warn"><p>El formato, la división, el grupo de edad, el cinturón y el género solo se pueden cambiar mientras la categoría está en estado <strong>Inscripción</strong> (sin llave). Con llave generada puedes seguir cambiando nombre, tatami u hora.</p></div>
-
-  <h3>6.5 Inscripciones</h3>
-  <p>Lista de todos los inscritos del torneo con su categoría, peso declarado, siembra y estado del pesaje. Busca por atleta, documento o academia y filtra por categoría.</p>
-  <ol class="steps">
-    <li>Pulsa <strong>Inscribir</strong>, busca al atleta por nombre o documento y selecciónalo (debe existir en <em>Atletas</em>).</li>
-    <li>Deja la categoría en <strong>Automática</strong> para que el sistema la asigne según edad, género, cinturón y peso declarado, o elige una de las <strong>categorías compatibles</strong>. Indica el peso declarado y la siembra si procede.</li>
-    <li>Si un atleta queda <span class="badge">Sin categoría</span> (porque hay varias compatibles o ninguna), edítalo con el lápiz y elige una. El botón <strong>Asignar automáticamente</strong> intenta resolver de golpe todos los que estén sin categoría.</li>
-  </ol>
-  <figure><img src="img/adm-inscribir.png" alt="Formulario de inscripción"><figcaption>Inscribir un atleta: búsqueda y categoría.</figcaption></figure>
-  <figure><img src="img/adm-inscripciones.png" alt="Lista de inscripciones"></figure>
-
-  <h3>6.6 Pesaje</h3>
-  <p>Filtra por estado (<strong>Sin pesar</strong> es el filtro útil el día del pesaje) o busca por nombre o documento.</p>
-  <ol class="steps">
-    <li>Pulsa <strong>Pesar</strong> en la fila del atleta. Se abre un campo grande con el peso declarado precargado.</li>
-    <li>Escribe el <strong>peso real</strong> y pulsa <strong>Registrar</strong>.</li>
-    <li>Si el peso está dentro del rango de su categoría queda <span class="badge">Apto</span>. Si no, aparece un aviso de <span class="badge">Sobrepeso</span> o <span class="badge">Bajo peso</span> con botones para <strong>moverlo a una categoría compatible</strong> con su peso (mismo género, edad y cinturón, y todavía sin llave). Si no hay ninguna, el aviso lo indica.</li>
-  </ol>
-  <figure><img src="img/adm-pesaje-formulario.png" alt="Formulario de pesaje"><figcaption>Registro del peso real de un atleta.</figcaption></figure>
-  <ul>
-    <li>El botón <strong>Pesar</strong> se desactiva cuando la categoría del atleta ya tiene llave generada (elimina la llave primero si necesitas cambiar un peso).</li>
-    <li>Los atletas <span class="badge">Descalificado</span> no entran en la llave. Los que estén <em>Sin pesar</em> o fuera de peso sí entran, salvo que los muevas o los descalifiques; la pestaña Llaves lo avisa antes de generar.</li>
-  </ul>
-
-  <h3>6.7 Llaves</h3>
-  <p>Elige la categoría en el desplegable. La tarjeta superior muestra formato, atletas aptos, tatami y avisos.</p>
-  <h4>Generar la llave</h4>
-  <ul>
-    <li><strong>Generar por sorteo:</strong> orden aleatorio.</li>
-    <li><strong>Con siembra:</strong> respeta los números de siembra puestos en Inscripciones (1 contra el último, etc.); los BYE van a los mejores sembrados.</li>
-    <li><strong>Evitar misma academia:</strong> con la casilla marcada, el sistema intenta que dos atletas de la misma academia no se crucen en la primera ronda.</li>
-    <li>Hacen falta al menos 2 atletas aptos. Mientras ningún combate haya empezado puedes <strong>Regenerar</strong> (se pide confirmación) o <strong>Eliminar</strong> la llave (la categoría vuelve a Inscripción).</li>
-  </ul>
-  <figure><img src="img/adm-llaves.png" alt="Pestaña Llaves"><figcaption>Llave generada de una categoría en curso. El combate con borde verde está en el tatami ahora mismo.</figcaption></figure>
-  <h4>Registrar o corregir un resultado desde la llave</h4>
-  <p>Toca cualquier combate con los dos atletas definidos. Se abre <strong>Registrar resultado</strong>: primero <strong>¿quién ganó?</strong> (rojo o azul) y después el <strong>método de victoria</strong>. Al pulsar el método se guarda. Si el combate ya tenía resultado, se trata como corrección: el administrador no necesita indicar motivo, pero el cambio queda en la auditoría y los combates posteriores afectados vuelven a <em>pendiente</em> automáticamente.</p>
-  <figure><img src="img/adm-resultado-modal.png" alt="Registrar resultado"><figcaption>Paso 1 del registro: elegir ganador. Después se elige el método.</figcaption></figure>
-  <p>Debajo de la llave, el desplegable <strong>Anular un resultado</strong> permite devolver un combate a pendiente (también en cascada). Con <strong>PDF</strong> descargas la llave dibujada para imprimir.</p>
-
-  <h3>6.8 Tatamis</h3>
-  <ol class="steps">
-    <li><strong>Añadir</strong> los tatamis (escribe el nombre y pulsa Añadir). Cada tarjeta muestra su mesa, categorías programadas y número de combates.</li>
-    <li><strong>Asignar mesa:</strong> elige qué usuarios de mesa operan ese tatami (deben existir en <em>Usuarios</em> con rol Mesa de control).</li>
-    <li>En <strong>Programación</strong>, asigna a cada categoría un tatami y una hora; ordena con las flechas ↑ ↓. Pulsa <strong>Guardar programación</strong>: la cola de combates de cada tatami (los números #1, #2…) se recalcula según la hora, el orden de la categoría y el orden de los combates.</li>
-  </ol>
-  <figure><img src="img/adm-tatamis.png" alt="Pestaña Tatamis con la programación"></figure>
-
-  <h3>6.9 Auditoría</h3>
-  <p>Tabla con los últimos 300 cambios de resultado: cuándo, quién, combate, estado antes y después, y motivo. Es de solo lectura y sirve para resolver cualquier reclamación.</p>
-  <figure><img src="img/adm-auditoria.png" alt="Pestaña Auditoría"></figure>
-
-  <h3>6.10 Exportar</h3>
-  <table>
-    <tr><th>Documento</th><th>Contenido</th><th style="width:18%">Acceso</th></tr>
-    <tr><td>Participantes por categoría (PDF)</td><td>Inscritos con academia, cinturón y resultado del pesaje.</td><td>Público</td></tr>
-    <tr><td>Horarios por tatami (PDF)</td><td>Programación de categorías en cada área.</td><td>Público</td></tr>
-    <tr><td>Resultados y medallero (PDF)</td><td>Medallero por academia y podios.</td><td>Público</td></tr>
-    <tr><td>Llave de una categoría (PDF)</td><td>La llave dibujada, con conectores y ganadores marcados. Elige la categoría en el desplegable.</td><td>Público</td></tr>
-    <tr><td>Libro Excel completo</td><td>Hojas Participantes, Categorías, Resultados, Medallero y Podios. Incluye documento, correo y teléfono.</td><td>Solo con sesión</td></tr>
-  </table>
-  <figure><img src="img/adm-exportar.png" alt="Pestaña Exportar"></figure>
-  <div class="note"><p>Las horas del PDF de horarios se muestran en UTC; la web usa la hora local del navegador.</p></div>
-
-  <h3>6.11 Administrar desde el móvil</h3>
-  <p>Todas las pestañas funcionan en el teléfono: desliza la fila de pestañas hacia la izquierda para ver las demás. El menú lateral se abre con ☰. La barra inferior da acceso rápido a Inicio, Torneos, Atletas y Academias.</p>
-  <figure class="phone"><img src="img/mov-adm-resumen.png" alt="Resumen del torneo en el móvil"><figcaption>Resumen del torneo en un teléfono.</figcaption></figure>
-</section>
-
-<!-- ============================ 7. MESA ============================ -->
-<section class="chapter">
-  <h2>7. Mesa de control</h2>
-  <p>La mesa está diseñada para una <strong>tablet</strong> junto al tatami, con botones grandes y una o dos pulsaciones por resultado. Un usuario con rol Mesa solo ve los tatamis que tiene asignados; un administrador puede operar cualquier tatami eligiendo primero el torneo.</p>
-
-  <h3>7.1 Elegir el tatami</h3>
-  <figure><img src="img/mesa-tatamis.png" alt="Selección de tatami"><figcaption>Al entrar, la mesa elige su tatami.</figcaption></figure>
-
-  <h3>7.2 La consola del tatami</h3>
-  <p>De arriba abajo: el <strong>combate en curso</strong>, los <strong>siguientes combates</strong> (listos, con ambos atletas) y, en gris con borde discontinuo, los que <strong>esperan rival</strong>. La cabecera resume cuántos hay listos, esperando y finalizados. La lista se actualiza sola cada pocos segundos.</p>
-  <figure><img src="img/mesa-consola.png" alt="Consola de la mesa de control"></figure>
-
-  <h3>7.3 Registrar un combate (el caso normal)</h3>
-  <ol class="steps">
-    <li>Pulsa <strong>Iniciar</strong> en el primer combate de la cola. Pasa al bloque «Combate en curso» y se marca <em>En curso</em> en la llave pública y en el modo TV. Solo puede haber un combate en curso por tatami.</li>
-    <li>Cuando termine, pulsa <strong>Registrar ganador</strong>.</li>
-    <li>Toca la esquina ganadora (<span class="corner" style="background:#b22a30"></span>Rojo o <span class="corner" style="background:#2a4d8f"></span>Azul).</li>
-    <li>Toca el <strong>método de victoria</strong>. Se guarda al instante, el ganador avanza en la llave y el siguiente combate queda listo.</li>
-  </ol>
-  <figure><img src="img/mesa-registrar-ganador.png" alt="Registrar ganador desde la mesa"><figcaption>Registrar ganador: primero la esquina, después el método.</figcaption></figure>
-  <ul>
-    <li><strong>Resultado</strong> (el botón junto a Iniciar) registra un combate <em>sin</em> haberlo iniciado: útil si se te olvidó pulsar Iniciar o para resolver un combate ya disputado.</li>
-    <li><strong>No iniciado</strong> devuelve el combate en curso a la cola si lo iniciaste por error.</li>
-  </ul>
-
-  <h3>7.4 Corregir un resultado</h3>
-  <ol class="steps">
-    <li>Pulsa <strong>Finalizados</strong> arriba a la derecha para mostrar los combates ya registrados.</li>
-    <li>Toca el combate equivocado.</li>
-    <li>Elige el ganador correcto, escribe el <strong>motivo de la corrección</strong> (obligatorio para la mesa) y toca el método.</li>
-  </ol>
-  <figure><img src="img/mesa-finalizados.png" alt="Lista de finalizados"><figcaption>Lista de finalizados: toca uno para corregirlo.</figcaption></figure>
-  <div class="note warn"><p>Al corregir, los combates posteriores en los que participaba el ganador anterior vuelven automáticamente a <em>pendiente</em> y deberán registrarse de nuevo. Todo queda en la auditoría con tu nombre y el motivo.</p></div>
-</section>
-
-<!-- ============================ 8. TV ============================ -->
-<section class="chapter">
-  <h2>8. Modo TV</h2>
-  <p>Pantalla para proyectar en el pabellón, accesible desde la ficha del torneo, el inicio o el Resumen de administración (<strong>Modo TV</strong>). No requiere cuenta ni interacción:</p>
-  <ul>
-    <li>Alterna automáticamente cada 20 segundos entre <strong>Tatamis en vivo</strong> (combate actual y cola de cada tatami) y <strong>Medallero</strong>, cuando ya hay medallas. Los puntos bajo el contenido indican qué pantalla se muestra.</li>
-    <li>Tipografía grande que se escala con el tamaño de la pantalla (legible desde lejos en un televisor o proyector).</li>
-    <li>Reloj en la cabecera, botón de <strong>pantalla completa</strong> y flecha para volver a la ficha del torneo.</li>
-    <li>Se actualiza sola cada pocos segundos.</li>
-  </ul>
-  <figure><img src="img/pub-tv.png" alt="Modo TV"><figcaption>Modo TV mostrando los tatamis en vivo.</figcaption></figure>
-  <div class="note"><p>Consejo: abre el modo TV en un navegador en el ordenador conectado al proyector, pulsa el botón de pantalla completa y déjalo. Si la pantalla se apaga sola, desactiva el ahorro de energía del equipo.</p></div>
-</section>
-
-<!-- ============================ 9. FAQ ============================ -->
-<section class="chapter">
-  <h2>9. Preguntas frecuentes y problemas habituales</h2>
-
-  <h4>El público no ve mi torneo</h4>
-  <p>Está en estado <strong>Borrador</strong>. Cámbialo a Inscripción, Pesaje o En curso en Configuración.</p>
-
-  <h4>No puedo cambiar el formato, el peso o el cinturón de una categoría</h4>
-  <p>La categoría ya tiene llave. Elimina la llave en la pestaña Llaves (solo es posible si ningún combate ha empezado), cambia lo que necesites y vuelve a generarla.</p>
-
-  <h4>No puedo regenerar ni eliminar la llave</h4>
-  <p>Hay combates iniciados o finalizados. Anula primero sus resultados (desplegable «Anular un resultado» en Llaves) o corrígelos desde la propia llave.</p>
-
-  <h4>Un atleta aparece «Sin categoría»</h4>
-  <p>Había varias categorías compatibles (o ninguna) y el sistema no decide por ti. Edita la inscripción y elige la categoría, o pulsa <strong>Asignar automáticamente</strong> después de ajustar las categorías.</p>
-
-  <h4>El atleta no da el peso</h4>
-  <p>Al registrar el peso real aparecen botones para moverlo a una categoría compatible. Si no hay ninguna abierta, crea la categoría adecuada (o quítale la llave) y vuelve a pesar.</p>
-
-  <h4>El botón «Pesar» está desactivado</h4>
-  <p>La categoría del atleta ya tiene llave generada. Elimina la llave si realmente necesitas cambiar el peso.</p>
-
-  <h4>La mesa no ve ningún tatami</h4>
-  <p>Falta asignarle el tatami: en <em>Usuarios</em> (tatamis asignados) o en la pestaña <em>Tatamis</em> del torneo (<strong>Asignar mesa</strong>). Si el usuario está inactivo, actívalo.</p>
-
-  <h4>El botón «Iniciar» está desactivado en la mesa</h4>
-  <p>Ya hay un combate en curso en ese tatami. Regístralo o pulsa «No iniciado».</p>
-
-  <h4>Me he equivocado de ganador</h4>
-  <p>Mesa: pulsa <strong>Finalizados</strong>, toca el combate, elige el ganador correcto e indica el motivo. Administración: toca el combate en la llave o usa «Anular un resultado». Los combates posteriores afectados vuelven a pendiente.</p>
-
-  <h4>La llave se ve muy pequeña o muy grande en el teléfono</h4>
-  <p>Toca dos veces sobre la llave o pulsa <strong>Tamaño normal</strong> para volver a la escala legible; pellizca para ajustar; <strong>Ver completa</strong> muestra toda la llave de un vistazo. Si prefieres leer de arriba abajo, usa la vista <strong>Vertical</strong> o <strong>Lista</strong>.</p>
-
-  <h4>La rueda del ratón no mueve la llave en el ordenador</h4>
-  <p>Es a propósito: la rueda desplaza la página. Para hacer zoom usa <kbd>Ctrl</kbd> + rueda (o pellizco en el trackpad) o los botones + / −; para moverla, arrástrala.</p>
-
-  <h4>No puedo descargar el Excel completo</h4>
-  <p>Contiene datos personales, así que requiere haber iniciado sesión como administración. Los PDF sí son públicos.</p>
-
-  <h4>Los acentos salen mal al importar un CSV</h4>
-  <p>Guarda el archivo como «CSV UTF-8» (en Excel: Guardar como → CSV UTF-8) o usa directamente la plantilla Excel.</p>
-
-  <h4>Aparece «Algo salió mal»</h4>
-  <p>Pulsa <strong>Reintentar</strong> o <strong>Volver al inicio</strong>. Si se repite, anota la pantalla en la que ocurre y avisa al responsable técnico.</p>
-
-  <h4>¿Cómo funciona el desempate en todos contra todos?</h4>
-  <p>Según los criterios elegidos en la categoría, en orden: victorias, enfrentamiento directo, puntos por método de victoria (los puntos de cada método se definen en el deporte), menos derrotas y, en último caso, sorteo.</p>
-
-  <h4>¿Y la eliminación doble?</h4>
-  <p>Quien pierde en la llave principal pasa al repechaje. El ganador del repechaje se enfrenta al ganador de la llave principal en una <strong>gran final única</strong> (no hay segunda final). El bronce es para el perdedor de la final del repechaje.</p>
-</section>
-
-<!-- ============================ 10. GLOSARIO ============================ -->
-<section class="chapter">
-  <h2>10. Glosario de estados</h2>
-  <table>
-    <tr><th style="width:22%">Elemento</th><th style="width:24%">Estado</th><th>Significado</th></tr>
-    <tr><td rowspan="5"><strong>Torneo</strong></td><td><span class="badge">Borrador</span></td><td>En preparación. Invisible para el público.</td></tr>
-    <tr><td><span class="badge">Inscripción</span></td><td>Publicado; se están inscribiendo atletas.</td></tr>
-    <tr><td><span class="badge">Pesaje</span></td><td>Día del pesaje.</td></tr>
-    <tr><td><span class="badge">En curso</span></td><td>Hay combates. Se activa solo con el primer combate iniciado.</td></tr>
-    <tr><td><span class="badge">Finalizado</span></td><td>Terminado. Se conserva todo para consulta y exportación.</td></tr>
-    <tr><td rowspan="4"><strong>Categoría</strong></td><td><span class="badge">Inscripción</span></td><td>Sin llave; se pueden cambiar atletas y ajustes.</td></tr>
-    <tr><td><span class="badge">Llave lista</span></td><td>Llave generada, ningún combate empezado.</td></tr>
-    <tr><td><span class="badge">En curso</span></td><td>Al menos un combate iniciado o finalizado.</td></tr>
-    <tr><td><span class="badge">Finalizada</span></td><td>Todos los combates registrados; hay podio.</td></tr>
-    <tr><td rowspan="5"><strong>Pesaje</strong></td><td><span class="badge">Sin pesar</span></td><td>Todavía no se ha registrado el peso real.</td></tr>
-    <tr><td><span class="badge">Apto</span></td><td>Dentro del rango de su división.</td></tr>
-    <tr><td><span class="badge">Sobrepeso</span> / <span class="badge">Bajo peso</span></td><td>Fuera del rango. Conviene moverlo a otra categoría.</td></tr>
-    <tr><td><span class="badge">Descalificado</span></td><td>Excluido de la llave.</td></tr>
-    <tr><td rowspan="4"><strong>Combate</strong></td><td><span class="badge">Pendiente</span></td><td>Sin disputar (puede estar esperando rival).</td></tr>
-    <tr><td><span class="badge">En curso</span></td><td>Iniciado por la mesa; se muestra en verde.</td></tr>
-    <tr><td><span class="badge">Finalizado</span></td><td>Con ganador y método registrados.</td></tr>
-    <tr><td><span class="badge">BYE</span></td><td>Pase automático sin combate.</td></tr>
-  </table>
-  <p class="small">Zenkai Dojo · Manual de usuario · Las capturas pueden diferir ligeramente según la versión y el tema elegido.</p>
+  <div class="faq">
+    <h4>No puedo generar la llave</h4>
+    <ul>
+      <li>Hacen falta <b>al menos 2 atletas aptos</b> en la categoría. Revisa en <b>Pesaje</b> que no estén descalificados.</li>
+      <li>Si algún combate ya empezó, la llave no se puede regenerar. Corrige los resultados uno a uno (3.8).</li>
+    </ul>
+  </div>
+  <div class="faq">
+    <h4>Un atleta no aparece en su categoría</h4>
+    <ul>
+      <li>En <b>Inscripciones</b>, busca al atleta: si pone <b>Sin categoría</b>, pulsa el lápiz y elige la suya.</li>
+      <li>Comprueba sus datos en <b>Atletas</b>: fecha de nacimiento, género y cinturón deciden la categoría.</li>
+      <li>Si la categoría ya tiene llave, no admite más atletas: elimina la llave (si no empezó ningún combate), inscríbelo y genérala de nuevo.</li>
+    </ul>
+  </div>
+  <div class="faq">
+    <h4>Me equivoqué al registrar un ganador</h4>
+    <p>Desde la mesa: <b>Finalizados</b> → toca el combate → elige el ganador correcto, escribe el motivo y toca el método (capítulo 4). Como administrador, también desde la pestaña <b>Llaves</b> (3.8).</p>
+  </div>
+  <div class="faq">
+    <h4>La página tarda en cargar</h4>
+    <p>Si nadie la ha usado en un rato, el servidor se está despertando: <b>espera hasta un minuto</b> y los datos aparecerán solos. Si pasado ese tiempo ves «El servidor aún no responde», pulsa <b>Reintentar</b> y revisa tu conexión a internet.</p>
+  </div>
+  <div class="faq">
+    <h4>Pulsé «Iniciar» en el combate equivocado</h4>
+    <p>Pulsa <b>No iniciado</b> en el combate en curso. Vuelve a la cola sin resultado y puedes iniciar el correcto.</p>
+  </div>
+  <div class="faq">
+    <h4>La mesa no ve su tatami</h4>
+    <p>El administrador debe asignárselo: pestaña <b>Tatamis</b> → <b>Asignar mesa</b>, o en <b>Usuarios</b> editando ese usuario. Comprueba también que el usuario esté <b>activo</b>.</p>
+  </div>
+  <div class="faq">
+    <h4>El público no ve mi torneo</h4>
+    <p>Los torneos en <b>Borrador</b> están ocultos. En la pestaña <b>Configuración</b>, cambia el estado a <b>Inscripción</b>, <b>Pesaje</b> o <b>En curso</b> y pulsa <b>Guardar cambios</b>.</p>
+  </div>
+  <div class="faq">
+    <h4>El botón «Pesar» está gris</h4>
+    <p>La categoría de ese atleta ya tiene la llave generada, así que su peso no puede cambiar. Si necesitas pesarlo de nuevo, elimina primero la llave (pestaña <b>Llaves</b>) y vuelve a generarla después.</p>
+  </div>
 </section>
 
 </body>

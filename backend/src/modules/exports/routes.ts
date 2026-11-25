@@ -24,7 +24,7 @@ const ACCENT = '#c8373b';
 const MUTED = '#6b7280';
 
 function pdfDoc(title: string, subtitle: string, landscape = false) {
-  const doc = new PDFDocument({ size: 'A4', layout: landscape ? 'landscape' : 'portrait', margin: 40, info: { Title: title, Author: 'Zenkai Dojo' } });
+  const doc = new PDFDocument({ size: 'A4', layout: landscape ? 'landscape' : 'portrait', margin: 40, info: { Title: title, Author: 'Torneo Dojo' } });
   const chunks: Buffer[] = [];
   doc.on('data', (c: Buffer) => chunks.push(c));
   const done = new Promise<Buffer>((resolve) => doc.on('end', () => resolve(Buffer.concat(chunks))));
@@ -34,7 +34,7 @@ function pdfDoc(title: string, subtitle: string, landscape = false) {
 function header(doc: PDFKit.PDFDocument, title: string, subtitle: string) {
   const w = doc.page.width - 80;
   doc.save().rect(40, 40, 6, 34).fill(ACCENT).restore();
-  doc.fillColor(INK).font('Helvetica-Bold').fontSize(18).text('ZENKAI DOJO', 54, 40);
+  doc.fillColor(INK).font('Helvetica-Bold').fontSize(18).text('TORNEO DOJO', 54, 40);
   doc.fillColor(MUTED).font('Helvetica').fontSize(9).text(subtitle, 54, 60, { width: w - 14 });
   doc.moveDown(0.5);
   doc.fillColor(INK).font('Helvetica-Bold').fontSize(14).text(title, 40, 86, { width: w });
@@ -233,7 +233,7 @@ export const exportRoutes: FastifyPluginAsyncZod = async (app) => {
     const t = await prisma.tournament.findUniqueOrThrow({ where: { id: req.params.id } });
     const wanted = new Set((req.query.sheets ?? 'participantes,categorias,resultados,medallero').split(','));
     const wb = new ExcelJS.Workbook();
-    wb.creator = 'Zenkai Dojo';
+    wb.creator = 'Torneo Dojo';
     const style = (ws: ExcelJS.Worksheet) => {
       ws.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
       ws.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1F2433' } };
@@ -276,7 +276,7 @@ export const exportRoutes: FastifyPluginAsyncZod = async (app) => {
       style(ws2);
     }
     const buf = Buffer.from(await wb.xlsx.writeBuffer());
-    return send(reply, buf, `zenkai_${safe(t.name)}.xlsx`, XLSX);
+    return send(reply, buf, `torneo_dojo_${safe(t.name)}.xlsx`, XLSX);
   });
 
   /** Plantilla de importación de atletas */

@@ -15,7 +15,7 @@ const cases: Case[] = [
   { name: 'Nueva academia', path: () => '/admin/academias', open: (p) => p.getByRole('button', { name: 'Nueva academia' }).click(),
     fields: [['Nombre', 'Dojo del Sur'], ['Abreviatura', 'dds', 'DDS'], ['Ciudad', 'Cádiz']] },
   { name: 'Nuevo usuario', path: () => '/admin/usuarios', open: (p) => p.getByRole('button', { name: 'Nuevo usuario' }).click(),
-    fields: [['Nombre', 'Mesa Tres'], ['Correo', 'mesa3@zenkai.dojo'], ['Contraseña', 'secreta123']] },
+    fields: [['Nombre', 'Mesa Tres'], ['Correo', 'mesa3@torneo.dojo'], ['Contraseña', 'secreta123']] },
   { name: 'Nuevo atleta', path: () => '/admin/atletas', open: (p) => p.getByRole('button', { name: 'Nuevo atleta' }).click(),
     fields: [['Nombres', 'Lucía'], ['Apellidos', 'Fernández Ruiz'], ['Documento', 'X1234567'], ['Correo', 'lucia@example.com'], ['Teléfono', '+34 600 111 222']] },
   { name: 'Nueva categoría', path: (t) => `/admin/torneos/${t}/categorias`, open: (p) => p.getByRole('button', { name: 'Nueva', exact: true }).click(),

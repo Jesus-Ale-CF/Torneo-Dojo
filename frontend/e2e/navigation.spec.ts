@@ -16,7 +16,7 @@ test.describe('Navegación pública', () => {
         await page.locator(`a[href="/t/${tid}/c/${c.id}"]`).first().click();
         await expect(page).toHaveURL(new RegExp(`/c/${c.id}$`));
         await expectPageAlive(page, /./);
-        await page.getByRole('link', { name: /Zenkai Dojo, inicio/ }).click();
+        await page.getByRole('link', { name: /Torneo Dojo, inicio/ }).click();
         await expect(page).toHaveURL(/\/$/);
         await expectPageAlive(page, HOME);
         await expect(page.getByRole('banner')).toBeVisible();
@@ -37,7 +37,7 @@ test.describe('Navegación pública', () => {
     await page.mouse.move(b.x + 100, b.y + 60); await page.mouse.down(); await page.mouse.move(b.x + 40, b.y + 70, { steps: 4 }); await page.mouse.up();
     await page.keyboard.down('Control'); await page.mouse.wheel(0, -400); await page.keyboard.up('Control');
     await page.waitForTimeout(5500);
-    await page.getByRole('link', { name: /Zenkai Dojo, inicio/ }).click();
+    await page.getByRole('link', { name: /Torneo Dojo, inicio/ }).click();
     await expectPageAlive(page, HOME);
     guard.assertClean();
   });

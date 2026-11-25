@@ -17,7 +17,7 @@ export function HomePage() {
       <section className="tatami-weave relative overflow-hidden rounded-dojo border border-line bg-elevated/60 px-6 py-12 sm:px-10 sm:py-16">
         <motion.div initial={{ opacity: 0, scale: 0.8, rotate: -20 }} animate={{ opacity: 0.08, scale: 1, rotate: 0 }} transition={{ duration: 0.8 }} className="pointer-events-none absolute -right-10 -top-10 text-ink" aria-hidden><LogoMark className="h-72 w-72 sm:h-96 sm:w-96" /></motion.div>
         <motion.div variants={stagger(0.08)} initial="hidden" animate="show" className="relative max-w-2xl">
-          <motion.p variants={fadeUp} className="label text-shu">全快 · Zenkai Dojo</motion.p>
+          <motion.p variants={fadeUp} className="label text-shu">Torneo Dojo · Gestión de torneos</motion.p>
           <motion.h1 variants={fadeUp} className="mt-2 text-4xl leading-[1.05] sm:text-6xl">Torneos de combate, <span className="text-shu">en vivo</span> y sin fricción.</motion.h1>
           <motion.p variants={fadeUp} className="mt-4 max-w-xl text-base text-muted sm:text-lg">Sigue las llaves, los tatamis y el medallero en tiempo real. Si eres organización o mesa, entra para gestionar el torneo.</motion.p>
           <motion.div variants={fadeUp} className="mt-8 flex flex-wrap gap-3">

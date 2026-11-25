@@ -33,7 +33,7 @@ services:
       CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:${WEB_PORT:-8080}}
       NODE_ENV: production
       SEED_ON_START: ${SEED_ON_START:-true}
-      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-admin@zenkai.dojo}
+      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-admin@torneo.dojo}
       SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-admin123}
       SEED_TABLE_PASSWORD: ${SEED_TABLE_PASSWORD:-mesa123}
       DOCS_ENABLED: ${DOCS_ENABLED:-true}

@@ -57,7 +57,7 @@ export async function buildApp() {
   await app.register(swagger, {
     openapi: {
       info: {
-        title: 'Zenkai Dojo API',
+        title: 'Torneo Dojo API',
         description: 'API REST para la gestión de torneos de deportes de combate.',
         version: '1.0.0',
       },

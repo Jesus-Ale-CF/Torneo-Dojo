@@ -1,4 +1,4 @@
-# Zenkai Dojo 全快
+# Torneo Dojo
 
 Sistema web para gestionar **torneos de deportes de combate**: deportes configurables, categorías, inscripciones, pesaje, llaves, tatamis, mesa de control, medallero y vista pública en vivo. Viene con **Jiu-Jitsu Brasileño** precargado y funciona en teléfono, tablet, PC y TV.
 
@@ -12,7 +12,7 @@ Sistema web para gestionar **torneos de deportes de combate**: deportes configur
 
 ---
 
-> **Manual de usuario:** [`docs/Manual_de_usuario_Zenkai_Dojo.pdf`](docs/Manual_de_usuario_Zenkai_Dojo.pdf) explica con capturas cómo usar la aplicación (público, administración y mesa de control).
+> **Manual de usuario:** [`docs/manual/Manual_Torneo_Dojo.pdf`](docs/manual/Manual_Torneo_Dojo.pdf) explica con capturas cómo usar la aplicación (público, administración y mesa de control). Se regenera con `npm run manual` desde `frontend/`.
 
 ## Índice
 
@@ -59,13 +59,13 @@ docker compose down -v && docker compose up -d --build
 
 | Rol | Correo | Contraseña | Alcance |
 |---|---|---|---|
-| Administrador | `admin@zenkai.dojo` | `admin123` | Todo el sistema |
-| Mesa de control | `mesa@zenkai.dojo` | `mesa123` | Tatami 1 |
-| Mesa de control | `mesa2@zenkai.dojo` | `mesa123` | Tatamis 2 y 3 |
+| Administrador | `admin@torneo.dojo` | `admin123` | Todo el sistema |
+| Mesa de control | `mesa@torneo.dojo` | `mesa123` | Tatami 1 |
+| Mesa de control | `mesa2@torneo.dojo` | `mesa123` | Tatamis 2 y 3 |
 
 El público no necesita cuenta.
 
-**Datos de ejemplo:** torneo *Zenkai Open 2026* en curso, 3 tatamis, 6 academias, 45 atletas y 8 categorías que cubren los cuatro formatos de llave. Hay categorías finalizadas con podio, otras en curso con un combate activo en el Tatami 1, otras sin llave, un atleta con sobrepeso pendiente de resolver y dos sin pesar. También se incluye Judo como segundo deporte, sin torneo.
+**Datos de ejemplo:** torneo *Open de Madrid 2026* en curso, 3 tatamis, 6 academias, 45 atletas y 8 categorías que cubren los cuatro formatos de llave. Hay categorías finalizadas con podio, otras en curso con un combate activo en el Tatami 1, otras sin llave, un atleta con sobrepeso pendiente de resolver y dos sin pesar. También se incluye Judo como segundo deporte, sin torneo.
 
 ## 3. Desarrollo local
 

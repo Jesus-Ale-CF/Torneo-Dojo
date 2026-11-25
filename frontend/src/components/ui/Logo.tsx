@@ -12,7 +12,7 @@ export function Logo({ compact = false }: { compact?: boolean }) {
       <LogoMark />
       {!compact && (
         <span className="font-display text-xl font-black leading-none tracking-tight">
-          Zenkai<span className="text-shu">·</span>Dojo
+          Torneo<span className="text-shu">·</span>Dojo
         </span>
       )}
     </span>

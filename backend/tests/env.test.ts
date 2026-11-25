@@ -38,7 +38,7 @@ describe('parseEnv', () => {
 
 describe('seedCredentials', () => {
   it('desarrollo: contraseñas conocidas', () => {
-    expect(seedCredentials({})).toMatchObject({ adminEmail: 'admin@zenkai.dojo', adminPassword: 'admin123', tablePassword: 'mesa123', fromEnv: false });
+    expect(seedCredentials({})).toMatchObject({ adminEmail: 'admin@torneo.dojo', adminPassword: 'admin123', tablePassword: 'mesa123', fromEnv: false });
   });
   it('producción: exige SEED_ADMIN_PASSWORD y SEED_TABLE_PASSWORD', () => {
     expect(() => seedCredentials({ NODE_ENV: 'production' })).toThrow(/SEED_ADMIN_PASSWORD, SEED_TABLE_PASSWORD/);
